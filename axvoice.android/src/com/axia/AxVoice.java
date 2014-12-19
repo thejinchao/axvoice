@@ -4,9 +4,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
 
-import com.thecodeway.axtrace.AxTrace;
-//import com.unity3d.player.UnityPlayer;
-
 public class AxVoice {
 	
 	//////////////////////////////////////////////////////
@@ -15,18 +12,18 @@ public class AxVoice {
 	//-------------------------------------------------------------------
 	static public void init(String dataPath, String uploadURL)
 	{
-		AxTrace.SetTraceServer("192.168.0.100", 1978);
+		//AxTrace.SetTraceServer("192.168.0.100", 1978);
 
 		Config.cacheAudioPath = dataPath+"/";
 		Config.uploadUrl = uploadURL;
 		
-		AxTrace.Trace("Init cache=%s, upload=%s", dataPath, uploadURL);
+		//AxTrace.Trace("Init cache=%s, upload=%s", dataPath, uploadURL);
 	}
 	
 	//-------------------------------------------------------------------
 	static public long beginRecord()
 	{
-		AxTrace.Trace("Begin Record");
+		//AxTrace.Trace("Begin Record");
 		
 		synchronized(VoiceManager.getInstance().thelock)  {
 			//allocate new voice
@@ -57,7 +54,7 @@ public class AxVoice {
 					MessageQueue.getInstance().pushMessage(
 							VoiceMessage.MT_RECORD_MSG, voiceID, "complete", true, md5);
 					
-					AxTrace.Trace("Complete Record");
+					//AxTrace.Trace("Complete Record");
 				}catch(NoSuchElementException e){
 					//TODO: error
 					return;
@@ -76,7 +73,7 @@ public class AxVoice {
 	//-------------------------------------------------------------------
 	static public void completeRecord(long voiceID, boolean abort)
 	{
-		AxTrace.Trace("Begin Complete Record");
+		//AxTrace.Trace("Begin Complete Record");
 		synchronized(VoiceManager.getInstance().thelock)  {
 			//find the voice item
 			VoiceItem item = VoiceManager.getInstance().findItem(voiceID);

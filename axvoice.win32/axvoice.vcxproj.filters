@@ -60,9 +60,6 @@
     <ClCompile Include="AV_OpenCoreWrap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AxTrace.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AV_MessageQueue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -108,9 +105,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AV_OpenCoreWrap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AxTrace.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AV_MessageQueue.h">

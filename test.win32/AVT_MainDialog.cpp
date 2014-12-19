@@ -1,6 +1,5 @@
 #include "StdAfx.h"
 #include "AVT_MainDialog.h"
-#include "AxTrace.h"
 
 //--------------------------------------------------------------------------------------------
 CMainDialog::CMainDialog()
@@ -44,7 +43,7 @@ LRESULT CMainDialog::OnRecordButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BO
 	bool record = (BST_CHECKED==IsDlgButtonChecked(wID));
 	if (record)
 	{
-		AxTrace("begin record...");
+		//AxTrace("begin record...");
 
 		m_currentID = AxVoice_BeginRecord();
 		::SetDlgItemInt(m_hWnd, IDC_EDIT_VOICE_ID, m_currentID, FALSE);
@@ -56,7 +55,7 @@ LRESULT CMainDialog::OnRecordButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BO
 	}
 	else
 	{
-		AxTrace("complete record...");
+		//AxTrace("complete record...");
 
 		AxVoice_CompleteRecord(m_currentID);
 	}
@@ -76,7 +75,7 @@ void CMainDialog::onAxVoiceMessage(const AxVoiceMessage* message)
 			std::string p2 = message->getParam(2);
 			if( p0 == "complete")
 			{
-				AxTrace("[%d]Record %s, result=%s",  message->getVoiceID(), p1.c_str(), p2.c_str());
+				//AxTrace("[%d]Record %s, result=%s",  message->getVoiceID(), p1.c_str(), p2.c_str());
 
 				AxVoice_UploadVoice(m_currentID);
 
@@ -97,7 +96,7 @@ void CMainDialog::onAxVoiceMessage(const AxVoiceMessage* message)
 			std::string p2= message->getParam(2);
 			if( p0 == "complete")
 			{
-				AxTrace("[%d]Upload %s, result=%s",  message->getVoiceID(), p1.c_str(), p2.c_str());
+				//AxTrace("[%d]Upload %s, result=%s",  message->getVoiceID(), p1.c_str(), p2.c_str());
 			}
 		}
 		break;
@@ -110,7 +109,7 @@ void CMainDialog::onAxVoiceMessage(const AxVoiceMessage* message)
 			std::string p2= message->getParam(2);
 			if( p0 == "complete")
 			{
-				AxTrace("[%d]Download %s, result=%s",  message->getVoiceID(), p1.c_str(), p2.c_str());
+				//AxTrace("[%d]Download %s, result=%s",  message->getVoiceID(), p1.c_str(), p2.c_str());
 			}
 		}
 		break;
@@ -121,7 +120,7 @@ void CMainDialog::onAxVoiceMessage(const AxVoiceMessage* message)
 			std::string p0 = message->getParam(0);
 			if( p0 == "complete")
 			{
-				AxTrace("[%d]Play Voice complete", message->getVoiceID());
+				//AxTrace("[%d]Play Voice complete", message->getVoiceID());
 			}
 
 		}

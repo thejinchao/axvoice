@@ -5,8 +5,6 @@
 #include "AV_Util.h"
 #include "AV_MessageQueue.h"
 
-#include "AxTrace.h"
-
 //--------------------------------------------------------------------------------------------
 VoiceRecorder* VoiceRecorder::s_Instance = 0;
 
