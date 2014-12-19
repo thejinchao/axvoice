@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+   <EditText
+        android:id="@+id/editText_voice_url"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="1dp"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+    <Button
+        android:id="@+id/button_get_url"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/editText_voice_url"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:text="DebugGet" />
+    
+    <Button
+        android:id="@+id/button_create_voice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editText_voice_url"
+        android:layout_marginTop="1dp"
+        android:text="Create" />
+        
+    
+    <EditText
+        android:id="@+id/editText_voice_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_create_voice"
+        android:layout_marginTop="1dp"
+        android:ems="10" >
+    </EditText>
+    
+    <Button
+        android:id="@+id/button_get_voiceid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_create_voice"
+        android:layout_toRightOf="@id/editText_voice_id"
+        android:layout_alignParentRight="true"
+        android:text="DebugGet" />
+    
+    <Button
+        android:id="@+id/button_download"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editText_voice_id"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="5dp"
+        android:text="Download" />   
+    
+    <Button
+        android:id="@+id/button_play_voice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editText_voice_id"
+        android:layout_toRightOf="@id/button_download"
+        android:layout_marginTop="5dp"
+        android:text="PlayVoice" />   
+    
+    <Button
+        android:id="@+id/button_stop_voice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editText_voice_id"
+        android:layout_toRightOf="@id/button_play_voice"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="5dp"
+        android:text="StopVoice" />   
+    
+    <Button
+        android:id="@+id/button_record"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Record!" />
+            
+</RelativeLayout>
+
