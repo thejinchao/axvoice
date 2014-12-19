@@ -1,0 +1,14 @@
+LIBRARY	axvoice
+EXPORTS	
+	AxVoice_Init
+	AxVoice_BeginRecord
+	AxVoice_CompleteRecord
+	AxVoice_UploadVoice
+	AxVoice_CreatVoice
+	AxVoice_DownloadVoice
+	AxVoice_PlayVoice
+	AxVoice_StopVoice
+	AxVoice_DispatchMessage
+
+
+
