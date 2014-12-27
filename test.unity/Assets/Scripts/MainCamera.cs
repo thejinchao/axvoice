@@ -17,16 +17,19 @@ public class MainCamera : MonoBehaviour {
 	private string m_voiceID = "";
 	private int m_lineHeight, m_windowWidth;
 	
+	private bool isDownloading = false;
+	
 	// Use this for initialization
 	void Start () {
 	#if UNITY_IPHONE 
+		m_dataPath=Path.GetTempPath();
 	#elif UNITY_ANDROID
 		m_dataPath=Application.persistentDataPath;
 	#else
 		m_dataPath=Path.GetTempPath();
 	#endif
 			Debug.Log("datapath=" + m_dataPath);
-  		CallAxVoice.Init(m_dataPath, "http://111.206.74.78/upload_voice");
+  		CallAxVoice.Init(m_dataPath, "http://www.dashengine.com/upload_voice");
 	}
 	
 	// Update is called once per frame
@@ -59,6 +62,20 @@ public class MainCamera : MonoBehaviour {
 		GUILayout.Window(0, windowRect, UserForm, "");
 	}
 	
+	IEnumerator debugGetServerURL()
+	{
+    	WWW www = new WWW("http://www.dashengine.com/download/server_url.txt");
+			yield return www;
+    	m_serverURL = www.text;
+	}
+
+	IEnumerator debugGetVoiceID()
+	{
+    	WWW www = new WWW("http://www.dashengine.com/download/voice_id.txt");
+			yield return www;
+    	m_voiceID = www.text;
+	}
+		
 	void UserForm(int id)
 	{
 		GUILayout.BeginVertical(); 
@@ -67,9 +84,7 @@ public class MainCamera : MonoBehaviour {
     m_serverURL = GUILayout.TextField(m_serverURL, GUILayout.MaxWidth(m_windowWidth-200), GUILayout.Height(m_lineHeight));  
     if(GUILayout.Button("GET", GUILayout.Width(200), GUILayout.Height(m_lineHeight)))
     {
-    	Debug.Log("Read file=" + m_dataPath+"/url.txt");
-    	StreamReader sr = new StreamReader(m_dataPath+"/url.txt");
-    	m_serverURL = sr.ReadLine();
+    	StartCoroutine(debugGetServerURL());
     }
     GUILayout.EndHorizontal();  
     
@@ -88,8 +103,7 @@ public class MainCamera : MonoBehaviour {
     m_voiceID = GUILayout.TextField(m_voiceID, GUILayout.Height(m_lineHeight));  
     if(GUILayout.Button("GET", GUILayout.Width(200), GUILayout.Height(m_lineHeight)))
     {
-    	StreamReader sr = new StreamReader(m_dataPath+"/id.txt");
-    	m_voiceID = sr.ReadLine();
+    	StartCoroutine(debugGetVoiceID());
     }
     GUILayout.EndHorizontal();  
 
@@ -97,9 +111,11 @@ public class MainCamera : MonoBehaviour {
 		GUILayout.BeginHorizontal();  
     if(GUILayout.Button("Download", GUILayout.Width(m_windowWidth/3), GUILayout.Height(m_lineHeight)))
     {
+    	isDownloading = true;
     	CallAxVoice.DownloadVoice(System.UInt32.Parse(m_voiceID));
 			Debug.Log("Begin Download Voice, voiceid=" + currentVoiceID);
     }
+    GUI.enabled = !isDownloading;
     if(GUILayout.Button("Play", GUILayout.Width(m_windowWidth/3), GUILayout.Height(m_lineHeight)))
     {
     	CallAxVoice.PlayVoice(System.UInt32.Parse(m_voiceID));
@@ -110,6 +126,7 @@ public class MainCamera : MonoBehaviour {
     	CallAxVoice.StopVoice();
 			Debug.Log("Stop Current Voice");
     }
+    GUI.enabled = true;
     GUILayout.EndHorizontal();  
 
 		GUILayout.Space(m_lineHeight);
@@ -176,6 +193,11 @@ public class MainCamera : MonoBehaviour {
 		if(type == "complete")
 		{
 			Debug.Log("Upload complete, voiceid=" + voiceID + ", success=" + success + ", result=" + result);
+			if(success == "true")
+			{
+				m_serverURL = result;
+			}
+			
 		}
 	}
 	
@@ -188,6 +210,7 @@ public class MainCamera : MonoBehaviour {
 		if(type == "complete")
 		{
 			Debug.Log("Download complete, voiceid=" + voiceID + ", success=" + success + ", result=" + result);
+			isDownloading = false;
 		}
 	}	
 

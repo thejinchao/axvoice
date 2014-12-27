@@ -5,7 +5,8 @@
  * Do not make changes to this file unless you know what you are doing--modify
  * the SWIG interface file instead.
  * ----------------------------------------------------------------------------- */
-
+#if UNITY_IPHONE || UNITY_ANDROID
+#else
 namespace com.axia {
 
 class axvoicePINVOKE {
@@ -248,3 +249,4 @@ class axvoicePINVOKE {
 }
 
 }
+#endif

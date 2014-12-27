@@ -10,7 +10,74 @@ namespace com.axia
 	{
 			
 	#if UNITY_IPHONE
-	//Not support yet!
+        [DllImport ("__Internal")]
+        private static extern void _initAxVoice(string cachePath, string uploadURL);
+
+        [DllImport ("__Internal")]
+        private static extern uint _beginRecord();
+
+        [DllImport ("__Internal")]
+        private static extern void _completeRecord(uint voiceID);
+
+        [DllImport ("__Internal")]
+        private static extern void _uploadVoice(uint voiceID);
+
+        [DllImport ("__Internal")]
+        private static extern uint _createVoice(string serverURL);
+
+        [DllImport ("__Internal")]
+        private static extern void _downloadVoice(uint voiceID);
+
+        [DllImport ("__Internal")]
+        private static extern void _playVoice(uint voiceID);
+
+        [DllImport ("__Internal")]
+        private static extern void _stopVoice();
+
+        [DllImport ("__Internal")]
+        private static extern void _dispatchMessage(string callbackObjName);
+
+        public static void Init(string cachePath, string uploadURL)
+        {
+        	_initAxVoice(cachePath, uploadURL);
+        }
+        
+			  public static uint BeginRecord() {
+			    uint voiceID = (uint)_beginRecord();
+			    return voiceID;
+			  }
+
+			  public static void CompleteRecord(uint voiceID) {
+			    _completeRecord(voiceID);
+			    
+			    //hack
+			    UploadVoice(voiceID);
+			  }
+
+			  public static void UploadVoice(uint voiceID) {
+			    _uploadVoice(voiceID);
+			  }
+			
+			  public static uint CreatVoice(string serverURL) {
+			    uint voiceID = (uint)_createVoice(serverURL);
+			    return voiceID;
+			  }
+			
+			  public static void DownloadVoice(uint voiceID) {
+			    _downloadVoice(voiceID); 
+			  }
+			
+			  public static void PlayVoice(uint voiceID) {
+			    _playVoice(voiceID); 
+			  }
+			
+			  public static void StopVoice() {
+			    _stopVoice(); 
+			  }
+			
+			  public static void DispatchMessage(string callbackObjName) {
+			  	_dispatchMessage(callbackObjName);
+			  }
 	
 	#elif UNITY_ANDROID
         static private AndroidJavaClass clsAxVoice = new AndroidJavaClass("com.axia.AxVoice");
@@ -54,7 +121,7 @@ namespace com.axia
 			  	clsAxVoice.CallStatic("dispatchMessage_Unity", callbackObj); 
 			  }
 
-	#else		
+	#elif UNITY_STANDALONE_WIN		
 		    public class Callback : AxVoiceCallback
 		    {
 		    	GameObject callbackObj;
@@ -123,6 +190,38 @@ namespace com.axia
 			  	callback.setCallbackObj(callbackObj);
 			    axvoicePINVOKE.AxVoice_DispatchMessage(AxVoiceCallback.getCPtr(callback));
 			  }
+	#else
+	//NOT SUPPORT YET!
+			  public static void Init(string cachePath, string uploadURL) {
+			  	
+			  }
+			
+			  public static uint BeginRecord() {
+			    return 0;
+			  }
+			
+			  public static void CompleteRecord(uint voiceID) {
+			  }
+			
+			  public static void UploadVoice(uint voiceID) {
+			  }
+			
+			  public static uint CreatVoice(string szServerURL) {
+			  	return 0;
+			  }
+			
+			  public static void DownloadVoice(uint voiceID) {
+			  }
+			
+			  public static void PlayVoice(uint voiceID) {
+			  }
+			
+			  public static void StopVoice() {
+			  }
+			
+			  public static void DispatchMessage(string callbackObj) {
+			  }
+			  
 	#endif
 	}
 	

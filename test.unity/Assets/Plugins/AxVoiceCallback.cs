@@ -5,7 +5,8 @@
  * Do not make changes to this file unless you know what you are doing--modify
  * the SWIG interface file instead.
  * ----------------------------------------------------------------------------- */
-
+#if UNITY_IPHONE || UNITY_ANDROID
+#else
 namespace com.axia {
 
 public class AxVoiceCallback : global::System.IDisposable {
@@ -70,3 +71,4 @@ public class AxVoiceCallback : global::System.IDisposable {
 }
 
 }
+#endif
