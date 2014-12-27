@@ -1,6 +1,11 @@
 package com.axia.voice.test;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -11,8 +16,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,6 +29,8 @@ import com.axia.VoiceMessage;
 public class MainActivity extends Activity implements OnTouchListener, OnClickListener
 {
 	private static final int DISPATCH_VOICE_MESSAGE = 0;
+	private static final int DISPATCH_SERVER_URL_DOWNLOAD = 1;
+	private static final int DISPATCH_VOICE_ID_DOWNLOAD = 2;
 	private TextView voiceIDView, voiceURLView;
 	private long currentVoiceID;
 	private Timer mTimer;
@@ -67,6 +72,8 @@ public class MainActivity extends Activity implements OnTouchListener, OnClickLi
 					if(type=="complete")
 					{
 						Log.i("axvoice", "upload complete, id=" + voiceID + ", suc=" + success + ",result=" + result);
+						
+						voiceURLView.setText(result);
 					}
 				}
 				break;
@@ -79,6 +86,8 @@ public class MainActivity extends Activity implements OnTouchListener, OnClickLi
 					if(type=="complete")
 					{
 						Log.i("axvoice", "download complete, id=" + voiceID + ", suc=" + success + ",result=" + result);
+						((Button)findViewById(R.id.button_play_voice)).setEnabled(true);
+						((Button)findViewById(R.id.button_stop_voice)).setEnabled(true);
 					}
 				}
 				break;
@@ -127,9 +136,15 @@ public class MainActivity extends Activity implements OnTouchListener, OnClickLi
 		mHandler = new Handler(){
 			@Override
 			public void handleMessage(Message msg) {
-			if(msg.what == DISPATCH_VOICE_MESSAGE) {
-				//call from main thread
-				AxVoice.dispatchMessage(msgCallback);
+				if(msg.what == DISPATCH_VOICE_MESSAGE) {
+					//call from main thread
+					AxVoice.dispatchMessage(msgCallback);
+				}
+				else if(msg.what == DISPATCH_SERVER_URL_DOWNLOAD) {
+					voiceURLView.setText(msg.getData().getString("data"));
+				}
+				else if(msg.what == DISPATCH_VOICE_ID_DOWNLOAD) {
+					voiceIDView.setText(msg.getData().getString("data"));
 				}
 			}
 		};
@@ -158,6 +173,35 @@ public class MainActivity extends Activity implements OnTouchListener, OnClickLi
 		return false;
 	}
 	
+	private void debugGetServerURl(final String address, final int msgType)
+	{
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					URL url = new URL(address);
+					HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+					conn.connect();
+			
+					BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));   
+					
+					String line = reader.readLine();
+					Bundle bundle = new Bundle();;
+					bundle.putString("data", line);
+					
+					Message msg = new Message();  
+					msg.what = msgType; 
+					msg.setData(bundle);
+					mHandler.sendMessage(msg);
+					
+				}catch(Exception e) {
+					
+				}
+			}
+		}).start();	
+		
+	}
+	
 	@Override
 	public void onClick(View v)
 	{
@@ -165,8 +209,7 @@ public class MainActivity extends Activity implements OnTouchListener, OnClickLi
 		{
 		case R.id.button_get_url:
 			{
-				String url = _readLineFromFile("/data/local/axvoice_url.txt");
-				voiceURLView.setText(url);
+				debugGetServerURl("http://www.dashengine.com/download/server_url.txt", DISPATCH_SERVER_URL_DOWNLOAD);
 			}
 			break;
 		case R.id.button_create_voice:
@@ -176,10 +219,19 @@ public class MainActivity extends Activity implements OnTouchListener, OnClickLi
 			}
 			break;
 			
+		case R.id.button_get_voiceid:
+			{
+				debugGetServerURl("http://www.dashengine.com/download/voice_id.txt", DISPATCH_VOICE_ID_DOWNLOAD);
+			}
+			break;
+			
 		case R.id.button_download:
 			{
 				long voiceID = Long.parseLong(voiceIDView.getText().toString());
 				AxVoice.downloadVoice(voiceID);
+				
+				((Button)findViewById(R.id.button_play_voice)).setEnabled(false);
+				((Button)findViewById(R.id.button_stop_voice)).setEnabled(false);
 			}
 			break;
 			

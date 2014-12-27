@@ -22,7 +22,7 @@
         android:layout_toRightOf="@id/editText_voice_url"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:text="DebugGet" />
+        android:text="GET" />
     
     <Button
         android:id="@+id/button_create_voice"
@@ -49,7 +49,7 @@
         android:layout_below="@id/button_create_voice"
         android:layout_toRightOf="@id/editText_voice_id"
         android:layout_alignParentRight="true"
-        android:text="DebugGet" />
+        android:text="GET" />
     
     <Button
         android:id="@+id/button_download"
