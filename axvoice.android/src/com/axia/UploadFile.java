@@ -51,11 +51,15 @@ public class UploadFile implements Runnable {
 			
 			if (statusCode == 200 || statusCode==201) {
 				String[] r = result.split("\\|");
-				if(r.length==2 && r[0].equals("SUCCESS"))
-					callBack.onUploadComplete(voiceID, r[1].trim());
-				else
-					callBack.onUploadFailed(voiceID, r[1].trim());
-					
+				if(r.length==2)
+				{
+				 	if(r[0].equals("SUCCESS"))
+						callBack.onUploadComplete(voiceID, r[1].trim());
+					else if(r[0].equals("ERROR"))
+						callBack.onUploadFailed(voiceID, r[1].trim());
+					else
+						callBack.onUploadFailed(voiceID, result);
+				}
 			}else {
 				callBack.onUploadFailed(voiceID, "HTTP_CODE="+statusCode);
 			}
