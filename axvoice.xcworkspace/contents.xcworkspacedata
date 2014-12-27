@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:test.ios/test.ios.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:axvoice.ios/axvoice.ios.xcodeproj">
+   </FileRef>
+</Workspace>
