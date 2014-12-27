@@ -11,6 +11,7 @@ std::string md5File(const char* szFileName)
 	if(fp==0) return "";
 
 	MD5_CTX ctx;
+	MD5Init(&ctx);
 
 	do
 	{
