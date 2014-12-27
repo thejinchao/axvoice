@@ -6,7 +6,7 @@ rd /s /q .\_gen
 mkdir _gen
 
 echo "Build axvoice java code..."
-javac -d .\_gen -bootclasspath %ANDROID_SDK_ROOT%\platforms\%ANDROID_TARGET%\android.jar;.\libs\unity-classes.jar -classpath .\libs\axtrace.jar .\src\com\axia\*.java
+javac -d .\_gen -bootclasspath %ANDROID_SDK_ROOT%\platforms\%ANDROID_TARGET%\android.jar;.\libs\unity-classes.jar -encoding gbk .\src\com\axia\*.java
 
 echo "Creating axvoice.jar..."
 pause
