@@ -17,8 +17,7 @@ public class MainCamera : MonoBehaviour {
 	private string m_voiceID = "";
 	private int m_lineHeight, m_windowWidth;
 	
-	private bool isDownloading = false;
-	
+
 	// Use this for initialization
 	void Start () {
 	#if UNITY_IPHONE 
@@ -111,11 +110,9 @@ public class MainCamera : MonoBehaviour {
 		GUILayout.BeginHorizontal();  
     if(GUILayout.Button("Download", GUILayout.Width(m_windowWidth/3), GUILayout.Height(m_lineHeight)))
     {
-    	isDownloading = true;
     	CallAxVoice.DownloadVoice(System.UInt32.Parse(m_voiceID));
 			Debug.Log("Begin Download Voice, voiceid=" + currentVoiceID);
     }
-    GUI.enabled = !isDownloading;
     if(GUILayout.Button("Play", GUILayout.Width(m_windowWidth/3), GUILayout.Height(m_lineHeight)))
     {
     	CallAxVoice.PlayVoice(System.UInt32.Parse(m_voiceID));
@@ -126,7 +123,6 @@ public class MainCamera : MonoBehaviour {
     	CallAxVoice.StopVoice();
 			Debug.Log("Stop Current Voice");
     }
-    GUI.enabled = true;
     GUILayout.EndHorizontal();  
 
 		GUILayout.Space(m_lineHeight);
@@ -210,7 +206,6 @@ public class MainCamera : MonoBehaviour {
 		if(type == "complete")
 		{
 			Debug.Log("Download complete, voiceid=" + voiceID + ", success=" + success + ", result=" + result);
-			isDownloading = false;
 		}
 	}	
 
