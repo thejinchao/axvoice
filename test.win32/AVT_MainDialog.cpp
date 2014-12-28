@@ -17,6 +17,15 @@ LRESULT CMainDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 	//move to default position
 	SetWindowPos(0, 100, 100, 0, 0, SWP_NOSIZE);
 
+	//init axvoice
+	char szTempPath[MAX_PATH] = { 0 };
+	GetTempPathA(MAX_PATH, szTempPath);
+
+	PathAppendA(szTempPath, "axvoice_cache_audio");
+	::CreateDirectoryA(szTempPath, 0);
+
+	AxVoice_Init(szTempPath, "http://www.dashengine.com/upload_voice");
+
 	m_axvoiceCallback = new Callback(this);
 
 	SetTimer(101, 10);
@@ -96,6 +105,7 @@ void CMainDialog::onAxVoiceMessage(const AxVoiceMessage* message)
 			std::string p2= message->getParam(2);
 			if( p0 == "complete")
 			{
+				::SetDlgItemTextA(m_hWnd, IDC_EDIT_SERVER_URL, p2.c_str());
 				//AxTrace("[%d]Upload %s, result=%s",  message->getVoiceID(), p1.c_str(), p2.c_str());
 			}
 		}

@@ -23,7 +23,9 @@ bool AxVoice_Init(const char* cachePath, const char* uploadURL)
 
 	if(cachePath&&cachePath[0]!=0)
 		g_cacheAudioPath = cachePath;
-	g_uploadURL = uploadURL;
+
+	if(uploadURL && uploadURL[0]!=0)
+		g_uploadURL = uploadURL;
 	return true;
 }
 
