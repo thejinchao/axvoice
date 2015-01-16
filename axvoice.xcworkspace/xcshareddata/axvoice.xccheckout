@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>FF95C228-6929-46A2-BE07-017A741141B6</string>
+	<key>IDESourceControlProjectName</key>
+	<string>axvoice</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>E5B382404D50347D0C702D88846BC37C6B17D04B</key>
+		<string>https://github.com/thejinchao/axvoice.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>axvoice.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>E5B382404D50347D0C702D88846BC37C6B17D04B</key>
+		<string>..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/thejinchao/axvoice.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>E5B382404D50347D0C702D88846BC37C6B17D04B</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>E5B382404D50347D0C702D88846BC37C6B17D04B</string>
+			<key>IDESourceControlWCCName</key>
+			<string>_axvoice</string>
+		</dict>
+	</array>
+</dict>
+</plist>
