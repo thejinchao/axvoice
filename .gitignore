@@ -1,3 +1,5 @@
 *.DS_Store
-
 *.meta
+*.xccheckout
+/axvoice.xcworkspace/xcuserdata
+/test.android/.settings
