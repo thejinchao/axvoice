@@ -50,7 +50,7 @@
     
     NSURL *fileURL = [[NSURL alloc] initFileURLWithPath:_localWAVFile];
     _mediaPlayer  = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:nil];
-    _mediaPlayer.volume = 30.0f;
+    _mediaPlayer.volume = 100.0f;
     
     if (_mediaPlayer.duration < 1)
     {
