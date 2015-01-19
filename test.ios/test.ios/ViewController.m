@@ -126,7 +126,7 @@
         }
         else
         {
-            NSLog(@"response_code=%d", response.statusCode);
+            NSLog(@"response_code=%ld", (long)response.statusCode);
         }
     }
     
