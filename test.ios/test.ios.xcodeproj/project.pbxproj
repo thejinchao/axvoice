@@ -14,9 +14,9 @@
 		CE96380E1A4AA52100C374FD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE96380C1A4AA52100C374FD /* Main.storyboard */; };
 		CE9638101A4AA52100C374FD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE96380F1A4AA52100C374FD /* Images.xcassets */; };
 		CE9638131A4AA52100C374FD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE9638111A4AA52100C374FD /* LaunchScreen.xib */; };
-		CE96382A1A4AA7B600C374FD /* libaxvoice.ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE9638291A4AA7B600C374FD /* libaxvoice.ios.a */; };
 		CE96382C1A4AA7CF00C374FD /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE96382B1A4AA7CF00C374FD /* AVFoundation.framework */; };
 		CE96384E1A4BA4CB00C374FD /* libopencore-amrnb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE96384D1A4BA4CB00C374FD /* libopencore-amrnb.a */; };
+		CEDA803D1A6D229B00FB4DB2 /* libaxvoice.ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEDA803C1A6D229B00FB4DB2 /* libaxvoice.ios.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,10 +31,10 @@
 		CE96380D1A4AA52100C374FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CE96380F1A4AA52100C374FD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		CE9638121A4AA52100C374FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		CE9638291A4AA7B600C374FD /* libaxvoice.ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libaxvoice.ios.a; path = "../../../../Library/Developer/Xcode/DerivedData/axvoice-dfshwlxusszcfnfrexdzfpahfnvv/Build/Products/Debug-iphoneos/libaxvoice.ios.a"; sourceTree = "<group>"; };
 		CE96382B1A4AA7CF00C374FD /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		CE96382E1A4AA97300C374FD /* axvoice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = axvoice.h; path = ../axvoice.ios/axvoice.ios/axvoice.h; sourceTree = "<group>"; };
 		CE96384D1A4BA4CB00C374FD /* libopencore-amrnb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libopencore-amrnb.a"; path = "../axvoice.ios/axvoice.ios/opencore-amr/libopencore-amrnb.a"; sourceTree = "<group>"; };
+		CEDA803C1A6D229B00FB4DB2 /* libaxvoice.ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libaxvoice.ios.a; path = "../../../../Library/Developer/Xcode/DerivedData/axvoice-dfshwlxusszcfnfrexdzfpahfnvv/Build/Products/Release-iphoneos/libaxvoice.ios.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,9 +42,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEDA803D1A6D229B00FB4DB2 /* libaxvoice.ios.a in Frameworks */,
 				CE96382C1A4AA7CF00C374FD /* AVFoundation.framework in Frameworks */,
 				CE96384E1A4BA4CB00C374FD /* libopencore-amrnb.a in Frameworks */,
-				CE96382A1A4AA7B600C374FD /* libaxvoice.ios.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,7 +99,6 @@
 			children = (
 				CE96384D1A4BA4CB00C374FD /* libopencore-amrnb.a */,
 				CE96382E1A4AA97300C374FD /* axvoice.h */,
-				CE9638291A4AA7B600C374FD /* libaxvoice.ios.a */,
 			);
 			name = axvoice;
 			sourceTree = "<group>";
@@ -107,6 +106,7 @@
 		CE9638301A4AAA0000C374FD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CEDA803C1A6D229B00FB4DB2 /* libaxvoice.ios.a */,
 				CE96382B1A4AA7CF00C374FD /* AVFoundation.framework */,
 			);
 			name = Frameworks;
@@ -306,6 +306,7 @@
 					"$(inherited)",
 					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/axvoice-dfshwlxusszcfnfrexdzfpahfnvv/Build/Products/Debug-iphoneos",
 					"/Users/jinchao/Documents/App/axvoice/axvoice.ios/axvoice.ios/opencore-amr",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/axvoice-dfshwlxusszcfnfrexdzfpahfnvv/Build/Products/Release-iphoneos",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -322,6 +323,7 @@
 					"$(inherited)",
 					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/axvoice-dfshwlxusszcfnfrexdzfpahfnvv/Build/Products/Debug-iphoneos",
 					"/Users/jinchao/Documents/App/axvoice/axvoice.ios/axvoice.ios/opencore-amr",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/axvoice-dfshwlxusszcfnfrexdzfpahfnvv/Build/Products/Release-iphoneos",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
