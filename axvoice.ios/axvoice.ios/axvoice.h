@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MessageQueue.h"
+#import "VoiceMessage.h"
+
 
 @interface axvoice : NSObject
 
