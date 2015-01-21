@@ -9,7 +9,7 @@
 #define PCM_FRAME_SIZE 160 // 8khz 8000*0.02=160
 
 //--------------------------------------------------------------------------------------------
-void _writeWAVEFileHeader(FILE* fpwave, int nFrameCount)
+bool writeWavFileHead(HANDLE hFile, size_t fmtDataSize)
 {
 	typedef struct
 	{
@@ -32,55 +32,42 @@ void _writeWAVEFileHeader(FILE* fpwave, int nFrameCount)
 		int nAvgBytesPerSec;
 		short nBlockAlign;
 		short nBitsPerSample;
-	}WAVEFORMAT;
+	}WAVE_FORMAT;
 
-	typedef struct
-	{
-		short nFormatTag;
-		short nChannels;
-		int nSamplesPerSec;
-		int nAvgBytesPerSec;
-		short nBlockAlign;
-		short nBitsPerSample;
-		short nExSize;
-	}WAVEFORMATX;
+	if(hFile==0) return false;
 
-	char tag[16] = "";
+	DWORD dwNumToWrite=0;
 
-	// 1. 写RIFF头
-	RIFFHEADER riff;
-	StringCbCopyA(tag, 16, "RIFF");
-	memcpy(riff.chRiffID, tag, 4);
-	riff.nRiffSize = 4                                     // WAVE
-	+ sizeof(XCHUNKHEADER)               // fmt 
-	+ sizeof(WAVEFORMATX)           // WAVEFORMATX
-	+ sizeof(XCHUNKHEADER)               // DATA
-	+ nFrameCount*160*sizeof(short);    //
-	StringCbCopyA(tag, 16, "WAVE");
-	memcpy(riff.chRiffFormat, tag, 4);
-	fwrite(&riff, 1, sizeof(RIFFHEADER), fpwave);
-	
-	// 2. 写FMT块
+	//write riff head
+	RIFFHEADER head;
+	memcpy(head.chRiffID, "RIFF", 4);
+	head.nRiffSize = sizeof(RIFFHEADER) + 
+		sizeof(XCHUNKHEADER) + 
+		sizeof(WAVE_FORMAT) +
+		sizeof(XCHUNKHEADER) +
+		fmtDataSize;
+	memcpy(head.chRiffFormat, "WAVE", 4);
+	WriteFile(hFile, &head, sizeof(head), &dwNumToWrite, NULL);
+
+	//write wave format
+	WAVE_FORMAT wf= {WAVE_FORMAT_PCM, 
+		1, //mono channel
+		16000, //16khz
+		32000, 
+		2, 
+		16};
 	XCHUNKHEADER chunk;
-	WAVEFORMATX wfx;
-	StringCbCopyA(tag, 16, "fmt ");
-	memcpy(chunk.chChunkID, tag, 4);
-	chunk.nChunkSize = sizeof(WAVEFORMATX);
-	fwrite(&chunk, 1, sizeof(XCHUNKHEADER), fpwave);
-	memset(&wfx, 0, sizeof(WAVEFORMATX));
-	wfx.nFormatTag = 1;
-	wfx.nChannels = 1; // 单声道
-	wfx.nSamplesPerSec = 8000; // 8khz
-	wfx.nAvgBytesPerSec = 16000;
-	wfx.nBlockAlign = 2;
-	wfx.nBitsPerSample = 16; // 16位
-	fwrite(&wfx, 1, sizeof(WAVEFORMATX), fpwave);
-	
-	// 3. 写data块头
-	StringCbCopyA(tag, 16, "data");
-	memcpy(chunk.chChunkID, tag, 4);
-	chunk.nChunkSize = nFrameCount*160*sizeof(short);
-	fwrite(&chunk, 1, sizeof(XCHUNKHEADER), fpwave);
+	memcpy(chunk.chChunkID, "fmt ", 4);
+	chunk.nChunkSize = sizeof(WAVE_FORMAT);
+	WriteFile(hFile, &chunk, sizeof(chunk), &dwNumToWrite, NULL);
+	WriteFile(hFile, &wf, sizeof(wf), &dwNumToWrite, NULL);
+
+	//data trunk
+	memcpy(chunk.chChunkID, "data", 4);
+	chunk.nChunkSize = fmtDataSize;
+	WriteFile(hFile, &chunk, sizeof(chunk), &dwNumToWrite, NULL);
+
+	return true;
 }
 
 //--------------------------------------------------------------------------------------------
@@ -176,10 +163,11 @@ bool convertAMRtoWAV(const char* szAMR, const char* szWAV)
 
 	// temp wav file
 	int nFrameCount = 0;
-	FILE* fpwave = 0;
-	fopen_s(&fpwave, szWAV, "wb");
-	_writeWAVEFileHeader(fpwave, nFrameCount);
-
+	DWORD dwNumWrited=0;
+	HANDLE hFile = CreateFileA(szWAV, GENERIC_WRITE, FILE_SHARE_READ, NULL, 
+                 CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	writeWavFileHead(hFile, 0);
+	
 	// init decoder
 	void* handle_amr = Decoder_Interface_init();
 
@@ -196,7 +184,7 @@ bool convertAMRtoWAV(const char* szAMR, const char* szWAV)
 	//decode amr to pcm
 	Decoder_Interface_Decode(handle_amr, amrFrame, pcmFrame, 0);
 	nFrameCount++;
-	fwrite(pcmFrame, sizeof(short), PCM_FRAME_SIZE, fpwave);
+	WriteFile(hFile, pcmFrame, sizeof(short)*PCM_FRAME_SIZE, &dwNumWrited, 0);
 
 	// decode other frame
 	while(true)
@@ -208,15 +196,19 @@ bool convertAMRtoWAV(const char* szAMR, const char* szWAV)
 		// 解码一个AMR音频帧成PCM数据 (8k-16b-单声道)
 		Decoder_Interface_Decode(handle_amr, amrFrame, pcmFrame, 0);
 		nFrameCount++;
-		fwrite(pcmFrame, sizeof(short), PCM_FRAME_SIZE, fpwave);
+		WriteFile(hFile, pcmFrame, sizeof(short)*PCM_FRAME_SIZE, &dwNumWrited, 0);
 	}
 	Decoder_Interface_exit(handle_amr);
-	fclose(fpwave); fclose(fpamr);
 
 	// reset wave head
-    fopen_s(&fpwave, szWAV, "r+");
-	_writeWAVEFileHeader(fpwave, nFrameCount);
-	fclose(fpwave);
+	DWORD dwCurrentPoint = SetFilePointer(hFile, 0, 0, FILE_CURRENT);
+	if(INVALID_SET_FILE_POINTER== SetFilePointer(hFile, 0, 0, FILE_BEGIN)) return false;
+
+	writeWavFileHead(hFile, nFrameCount*160*sizeof(short));
+
+	//reset to prev pointer
+	SetFilePointer(hFile, dwCurrentPoint, 0, FILE_BEGIN);
+	::SetEndOfFile(hFile); CloseHandle(hFile);
 
 	return true;
 }

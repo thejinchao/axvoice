@@ -22,8 +22,8 @@ VoiceRecorder::VoiceRecorder()
 
 	m_waveformat.wFormatTag = WAVE_FORMAT_PCM;
 	m_waveformat.nChannels = 1;
-	m_waveformat.nSamplesPerSec = 8000;
-	m_waveformat.nAvgBytesPerSec = 16000;
+	m_waveformat.nSamplesPerSec = 16000;
+	m_waveformat.nAvgBytesPerSec = 32000;
 	m_waveformat.nBlockAlign = 2;
 	m_waveformat.wBitsPerSample = 16;
 	m_waveformat.cbSize = 0;
@@ -236,48 +236,14 @@ bool VoiceRecorder::_completeRecord(bool save, std::string& error)
 //--------------------------------------------------------------------------------------------
 bool VoiceRecorder::_writeToWavFile(std::string& error)
 {
-	typedef struct
-	{
-		short nFormatTag;
-		short nChannels;
-		int nSamplesPerSec;
-		int nAvgBytesPerSec;
-		short nBlockAlign;
-		short nBitsPerSample;
-		short nExSize;
-	}WAVEFORMATX;
-
-	WAVEFORMATX wfx= {WAVE_FORMAT_PCM, 
-		1, //mono channel
-		8000, //8khz
-		16000, 
-		2, 
-		16, 
-		0};
-
 	HANDLE hFile = CreateFileA(m_strLocalWavFile.c_str(), GENERIC_WRITE, FILE_SHARE_READ, NULL, 
                  CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	DWORD dwNumToWrite=0;
 
-	//dwNumber = FCC("RIFF");
-	WriteFile(hFile, "RIFF", 4, &dwNumToWrite, NULL);
-	DWORD dwNumber = m_pWaveHdr.dwBytesRecorded + 18 + 20;
-	WriteFile(hFile, &dwNumber, 4, &dwNumToWrite, NULL);
+	writeWavFileHead(hFile, m_pWaveHdr.dwBytesRecorded);
 
-	//dwNumber = FCC("WAVE");
-	WriteFile(hFile, "WAVE", 4, &dwNumToWrite, NULL);
-
-	//dwNumber = FCC("fmt ");
-	WriteFile(hFile, "fmt ", 4, &dwNumToWrite, NULL);
-	dwNumber = 18L;
-	WriteFile(hFile, &dwNumber, 4, &dwNumToWrite, NULL);
-	WriteFile(hFile, &wfx, sizeof(WAVEFORMATEX), &dwNumToWrite, NULL);
-
-	//dwNumber = FCC("data");
-	WriteFile(hFile, "data", 4, &dwNumToWrite, NULL);
-	dwNumber = m_pWaveHdr.dwBytesRecorded;
-	WriteFile(hFile, &dwNumber, 4, &dwNumToWrite, NULL);
+	//write data
 	WriteFile(hFile, m_pWaveHdr.lpData, m_pWaveHdr.dwBytesRecorded, &dwNumToWrite, NULL);
 
 	SetEndOfFile(hFile); CloseHandle(hFile);
