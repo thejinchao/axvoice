@@ -7,13 +7,17 @@
 #include "AV_VoiceManager.h"
 #include "AV_Interface.h"
 #include "AV_MessageQueue.h"
+#include "AV_OpenCoreWrap.h"
 
 //--------------------------------------------------------------------------------------------
 DownloadFile::DownloadFile(unsigned int voiceID, 
-	const std::string& downloadURL, const std::string& localFile, 
+	const std::string& downloadURL, 
+	const std::string& localAmrFile, 
+	const std::string& localWavFile, 
 	ON_COMPLETE_CALLBACK cbComplete)
 	: m_downloadURL(downloadURL)
-	, m_localFile(localFile)
+	, m_localAmrFile(localAmrFile)
+	, m_localWavFile(localWavFile)
 	, m_hThread(0)
 	, m_curlTempMemory(0)
 	, m_curlTempMemorySize(0)
@@ -75,6 +79,12 @@ void DownloadFile::downloadThread(void)
 		success = _writeLocalFile();
 	}
 
+	//decode to wav file
+	if(success)
+	{
+		success = convertAMRtoWAV(m_localAmrFile.c_str(), m_localWavFile.c_str());
+	}
+
 	//cleanup
 	curl_easy_cleanup(curl_handle);
 
@@ -90,7 +100,7 @@ void DownloadFile::downloadThread(void)
 bool DownloadFile::_writeLocalFile(void)
 {
 	FILE* fp=0;
-	fopen_s(&fp, m_localFile.c_str(), "wb");
+	fopen_s(&fp, m_localAmrFile.c_str(), "wb");
 	fwrite(m_curlTempMemory, 1, m_curlTempMemoryTail, fp);
 	fclose(fp);
 

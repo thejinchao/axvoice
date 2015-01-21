@@ -16,7 +16,8 @@ private:
 	ON_COMPLETE_CALLBACK m_completeCallback;
 	unsigned int m_voiceID;
 	std::string m_downloadURL;
-	std::string m_localFile;
+	std::string m_localAmrFile;
+	std::string m_localWavFile;
 	HANDLE m_hThread;
 	std::string m_md5;
 
@@ -28,7 +29,9 @@ private:
 
 public:
 	DownloadFile(unsigned int voiceID, 
-		const std::string& downloadURL, const std::string& localFile, 
+		const std::string& downloadURL, 
+		const std::string& localAmrFile, 
+		const std::string& localWavFile, 
 		ON_COMPLETE_CALLBACK cbComplete);
 	~DownloadFile();
 };

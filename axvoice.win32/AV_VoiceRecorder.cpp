@@ -40,7 +40,10 @@ VoiceRecorder::~VoiceRecorder()
 }
 
 //--------------------------------------------------------------------------------------------
-bool VoiceRecorder::beginRecord(unsigned int voiceID, const std::string& localFile, ON_COMPLETE_CALLBACK cbComplete)
+bool VoiceRecorder::beginRecord(unsigned int voiceID, 
+		const std::string& localWavFile, 
+		const std::string& localAmrFile, 
+		ON_COMPLETE_CALLBACK cbComplete)
 {
 	if (voiceID == m_currentVoiceID) return true; //already record
 
@@ -57,7 +60,8 @@ bool VoiceRecorder::beginRecord(unsigned int voiceID, const std::string& localFi
 	m_threadHandle = (HANDLE)_beginthreadex(NULL, 0, _recordThread, this, CREATE_SUSPENDED, &nThreadID);
 	if (m_threadHandle == 0) return false;
 
-	m_strLocalFile = localFile;
+	m_strLocalWavFile = localWavFile;
+	m_strLocalAmrFile = localAmrFile;
 	m_currentVoiceID = voiceID;
 	m_recordSuccess = false;
 	m_errorCode = "";
@@ -152,17 +156,21 @@ bool VoiceRecorder::recordThread(std::string& error)
 	ret = ::WaitForMultipleObjects(2, handle, FALSE, INFINITE);
 	if (ret == WAIT_OBJECT_0){
 		//complete
-		m_recordSuccess = _completeRecord(m_strLocalFile.c_str(), error);
+		m_recordSuccess = _completeRecord(true, error);
 	}
 	else if (ret == WAIT_OBJECT_0 + 1){
 		//abort!
-		_completeRecord(0, error);
+		_completeRecord(false, error);
 		m_recordSuccess = false;
 	}
 
 	//get md5
-	std::string md5 = md5File(m_strLocalFile.c_str());
-	if(md5=="") return false;
+	std::string md5;
+	if(m_recordSuccess)
+	{
+		md5 = md5File(m_strLocalAmrFile.c_str());
+		if(md5=="") m_recordSuccess=false;
+	}
 
 	//callback
 	if(m_completeCallback)
@@ -179,11 +187,8 @@ bool VoiceRecorder::recordThread(std::string& error)
 }
 
 //--------------------------------------------------------------------------------------------
-bool VoiceRecorder::_completeRecord(const char* szSaveFile, std::string& error)
+bool VoiceRecorder::_completeRecord(bool save, std::string& error)
 {
-	DWORD NumToWrite = 0;
-	DWORD dwNumber = 0;
-
 	MMTIME mmt;
 	mmt.wType = TIME_BYTES;
 
@@ -206,11 +211,18 @@ bool VoiceRecorder::_completeRecord(const char* szSaveFile, std::string& error)
 
 	m_pWaveHdr.dwBytesRecorded = mmt.u.cb;
 
-	if (szSaveFile!=0)
+	if(save)
 	{
-		//AxTrace("PCM data size=%dK", (int)(m_pWaveHdr.dwBytesRecorded/1024));
-		if (!encodePCMToAMR(m_pWaveHdr.lpData, m_pWaveHdr.dwBytesRecorded, szSaveFile))
+		//save local wav file first
+		if(!_writeToWavFile(error)) 
 		{
+			return false;
+		}
+
+		//encode to amr file
+		if(!encodePCMToAMR(m_pWaveHdr.lpData, m_pWaveHdr.dwBytesRecorded, m_strLocalAmrFile.c_str()))
+		{
+			//TODO: ERROR
 			return false;
 		}
 	}
@@ -218,6 +230,57 @@ bool VoiceRecorder::_completeRecord(const char* szSaveFile, std::string& error)
 	waveInUnprepareHeader(m_hWaveIn, &m_pWaveHdr, sizeof(WAVEHDR));
 	GlobalFree(GlobalHandle(m_bufRec));
 	waveInClose(m_hWaveIn);
+	return true;
+}
+
+//--------------------------------------------------------------------------------------------
+bool VoiceRecorder::_writeToWavFile(std::string& error)
+{
+	typedef struct
+	{
+		short nFormatTag;
+		short nChannels;
+		int nSamplesPerSec;
+		int nAvgBytesPerSec;
+		short nBlockAlign;
+		short nBitsPerSample;
+		short nExSize;
+	}WAVEFORMATX;
+
+	WAVEFORMATX wfx= {WAVE_FORMAT_PCM, 
+		1, //mono channel
+		8000, //8khz
+		16000, 
+		2, 
+		16, 
+		0};
+
+	HANDLE hFile = CreateFileA(m_strLocalWavFile.c_str(), GENERIC_WRITE, FILE_SHARE_READ, NULL, 
+                 CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	DWORD dwNumToWrite=0;
+
+	//dwNumber = FCC("RIFF");
+	WriteFile(hFile, "RIFF", 4, &dwNumToWrite, NULL);
+	DWORD dwNumber = m_pWaveHdr.dwBytesRecorded + 18 + 20;
+	WriteFile(hFile, &dwNumber, 4, &dwNumToWrite, NULL);
+
+	//dwNumber = FCC("WAVE");
+	WriteFile(hFile, "WAVE", 4, &dwNumToWrite, NULL);
+
+	//dwNumber = FCC("fmt ");
+	WriteFile(hFile, "fmt ", 4, &dwNumToWrite, NULL);
+	dwNumber = 18L;
+	WriteFile(hFile, &dwNumber, 4, &dwNumToWrite, NULL);
+	WriteFile(hFile, &wfx, sizeof(WAVEFORMATEX), &dwNumToWrite, NULL);
+
+	//dwNumber = FCC("data");
+	WriteFile(hFile, "data", 4, &dwNumToWrite, NULL);
+	dwNumber = m_pWaveHdr.dwBytesRecorded;
+	WriteFile(hFile, &dwNumber, 4, &dwNumToWrite, NULL);
+	WriteFile(hFile, m_pWaveHdr.lpData, m_pWaveHdr.dwBytesRecorded, &dwNumToWrite, NULL);
+
+	SetEndOfFile(hFile); CloseHandle(hFile);
 	return true;
 }
 

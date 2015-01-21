@@ -7,11 +7,10 @@ public:
 	void reset(void);
 
 	///create new play thread
-	bool startPlay(unsigned int voiceID, const char* szAMRFile);
+	bool startPlay(unsigned int voiceID, const char* szWavFile);
 
 private:
 	unsigned int m_voiceID;
-	std::string m_strAMRFile;
 	std::string m_strWAVFile;
 	HANDLE m_hThread;
 	HANDLE m_hAbortSignal;

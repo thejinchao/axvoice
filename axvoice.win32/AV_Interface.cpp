@@ -59,7 +59,9 @@ unsigned int AxVoice_BeginRecord(void)
 	newItem->startRecord();
 
 	VoiceRecorder* recorder = VoiceRecorder::getInstance();
-	recorder->beginRecord(newItem->getVoiceID(), newItem->getLocalFile(), _onRecordCompleteCallback);
+	recorder->beginRecord(newItem->getVoiceID(), 
+		newItem->getLocalWavFile(), 
+		newItem->getLocalAmrFile(), _onRecordCompleteCallback);
 
 	return newItem->getVoiceID();
 }
@@ -208,7 +210,7 @@ void AxVoice_PlayVoice(unsigned int voiceID)
 	
 	//is playing?
 	player->reset();
-	player->startPlay(voiceID, item->getLocalFile().c_str());
+	player->startPlay(voiceID, item->getLocalWavFile().c_str());
 }
 
 //--------------------------------------------------------------------------------------------

@@ -22,15 +22,19 @@ VoiceItem* VoiceManager::allocateNewItem(void)
 {
 	__time32_t currentTime = _time32(0);
 
-	char localFilePath[MAX_PATH];
-	::StringCbCopyA(localFilePath, MAX_PATH, g_cacheAudioPath.c_str());
+	char locaAmrlFilePath[MAX_PATH];
+	::StringCbCopyA(locaAmrlFilePath, MAX_PATH, g_cacheAudioPath.c_str());
 	
-	char localFileName[MAX_PATH];
-	StringCchPrintfA(localFileName, MAX_PATH, "%d.amr", currentTime);
+	char localAmrFileName[MAX_PATH];
+	StringCchPrintfA(localAmrFileName, MAX_PATH, "%d.amr", currentTime);
 
-	PathAppendA(localFilePath, localFileName);
+	PathAppendA(locaAmrlFilePath, localAmrFileName);
 
-	VoiceItem *item = new VoiceItem(currentTime, localFilePath, 0, 0, 
+	char localWavFilePath[MAX_PATH];
+	StringCbCopyA(localWavFilePath, MAX_PATH, locaAmrlFilePath);
+	::PathRenameExtensionA(localWavFilePath, ".wav");
+
+	VoiceItem *item = new VoiceItem(currentTime, locaAmrlFilePath, localWavFilePath, 0, 0, 
 		VoiceItem::NO_LOCAL_FILE, VoiceItem::NO_SERVER_FILE);
 	{
 		m_voiceMap.insert(std::make_pair(item->getVoiceID(), item));

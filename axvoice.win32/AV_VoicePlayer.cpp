@@ -32,7 +32,7 @@ void VoicePlayer::reset(void)
 }
 
 //--------------------------------------------------------------------------------------------
-bool VoicePlayer::startPlay(unsigned int voiceID, const char* szAMRFile)
+bool VoicePlayer::startPlay(unsigned int voiceID, const char* szWavFile)
 {
 	//stop current thread first
 	reset();
@@ -50,13 +50,8 @@ bool VoicePlayer::startPlay(unsigned int voiceID, const char* szAMRFile)
 	if (m_hThread == 0) return false;
 
 	m_voiceID = voiceID;
-	m_strAMRFile = szAMRFile;
+	m_strWAVFile = szWavFile;
 
-	//wav file name
-	char szWaveFile[MAX_PATH]={0};
-	StringCbCopyA(szWaveFile, MAX_PATH, m_strAMRFile.c_str());
-	::PathRenameExtensionA(szWaveFile, ".wav");
-	m_strWAVFile = szWaveFile;
 	ResetEvent(m_hAbortSignal);
 
 	//start thread
@@ -76,24 +71,6 @@ UINT CALLBACK VoicePlayer::_playThread(void* pParam)
 //--------------------------------------------------------------------------------------------
 void VoicePlayer::playThread(void)
 {
-	//check local wave file exist
-	if(!PathFileExistsA(m_strWAVFile.c_str()))
-	{
-		//decode wav file
-		char szTmpFile[MAX_PATH]={0};
-		StringCbCopyA(szTmpFile, MAX_PATH, m_strWAVFile.c_str());
-		StringCbCatA(szTmpFile, MAX_PATH, ".tmp");
-
-		if(!convertAMRtoWAV(m_strAMRFile.c_str(), szTmpFile))
-		{
-			//TODO: ERROR
-			return;
-		}
-
-		//RENAME
-		::MoveFileA(szTmpFile, m_strWAVFile.c_str());
-	}
-
 	//check quit signal
 	if(WAIT_OBJECT_0  == WaitForSingleObject(m_hAbortSignal, 0)) return;
 

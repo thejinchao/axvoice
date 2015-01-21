@@ -10,7 +10,8 @@ public:
 	enum ServerStatus { NO_SERVER_FILE, UPLOADING, HAS_SERVER_FILE };
 
 	unsigned int getVoiceID(void) const { return voiceID;  }
-	const std::string& getLocalFile(void) const { return localFilePath; }
+	const std::string& getLocalAmrFile(void) const { return localAmrFile; }
+	const std::string& getLocalWavFile(void) const { return localWavFile; }
 	const std::string& getServerFile(void) const { return serverURL; }
 	const std::string& getMD5(void) const { return fileMD5; }
 	LocalStatus getLocalStatus(void) const { return localStatus; }
@@ -34,8 +35,9 @@ public:
 
 private:
 	unsigned int voiceID;
-	std::string localFilePath;
-	std::string fileMD5;
+	std::string localAmrFile;
+	std::string localWavFile;
+	std::string fileMD5;	//amr file md5
 	std::string serverURL;
 	LocalStatus localStatus;
 	ServerStatus serverStatus;
@@ -44,6 +46,11 @@ private:
 	DownloadFile* downloader;
 
 public:
-	VoiceItem(unsigned int voiceID, const char* localFilePath, const char* fileMD5, const char* serverURL,
-		LocalStatus localStatus, ServerStatus serverStatus);
+	VoiceItem(unsigned int voiceID, 
+		const char* localAmrFile,
+		const char* localWavFile,
+		const char* fileMD5, 
+		const char* serverURL,
+		LocalStatus localStatus, 
+		ServerStatus serverStatus);
 };

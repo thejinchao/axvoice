@@ -4,7 +4,10 @@ class VoiceRecorder
 {
 public:
 	typedef void (CALLBACK *ON_COMPLETE_CALLBACK)(unsigned int, bool, const std::string&);  
-	bool beginRecord(unsigned int voiceID, const std::string& localFile, ON_COMPLETE_CALLBACK cbComplete);
+	bool beginRecord(unsigned int voiceID, 
+		const std::string& localWavFile, 
+		const std::string& localAmrFile, 
+		ON_COMPLETE_CALLBACK cbComplete);
 	void completeRecord(unsigned int voiceID);
 
 private:
@@ -15,7 +18,8 @@ private:
 	WAVEHDR			m_pWaveHdr;
 	char *			m_bufRec;
 	unsigned int	m_currentVoiceID;
-	std::string		m_strLocalFile;
+	std::string		m_strLocalWavFile;
+	std::string		m_strLocalAmrFile;
 
 	bool			m_recordSuccess;
 	std::string		m_errorCode;
@@ -31,8 +35,9 @@ private:
 	static UINT CALLBACK _recordThread(void* pParam);
 	bool recordThread(std::string& error);
 
-	bool _completeRecord(const char* szSaveFile, std::string& error);
+	bool _completeRecord(bool save, std::string& error);
 
+	bool _writeToWavFile(std::string& error);
 public:
 	VoiceRecorder();
 	~VoiceRecorder();

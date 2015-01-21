@@ -6,10 +6,16 @@
 #include "AV_DownloadFile.h"
 
 //--------------------------------------------------------------------------------------------
-VoiceItem::VoiceItem(unsigned int _voiceID, const char* _localFilePath, const char* _fileMD5, const char* _serverURL,
-	LocalStatus _localStatus, ServerStatus _serverStatus)
+VoiceItem::VoiceItem(unsigned int _voiceID, 
+		const char* _localAmrFile,
+		const char* _localWavFile,
+		const char* _fileMD5, 
+		const char* _serverURL,
+		LocalStatus _localStatus, 
+		ServerStatus _serverStatus)
 	: voiceID(_voiceID)
-	, localFilePath(_localFilePath ? _localFilePath : "")
+	, localAmrFile(_localAmrFile ? _localAmrFile : "")
+	, localWavFile(_localWavFile ? _localWavFile : "")
 	, fileMD5(_fileMD5 ? _fileMD5 : "" )
 	, serverURL(_serverURL ? _serverURL : "")
 	, localStatus(_localStatus)
@@ -57,7 +63,7 @@ bool VoiceItem::beginUpload(UploadFile::ON_COMPLETE_CALLBACK cbComplete)
 	StringCbPrintfA(szName, 64, "-%s-", fileMD5.c_str());
 
 	//create uploader
-	this->uploader = new UploadFile(getVoiceID(), g_uploadURL, szName, getLocalFile(), cbComplete);
+	this->uploader = new UploadFile(getVoiceID(), g_uploadURL, szName, getLocalAmrFile(), cbComplete);
 	if(!(this->uploader->beginUploadThread())) return false;
 
 	this->serverStatus = UPLOADING;
@@ -84,7 +90,9 @@ bool VoiceItem::beginDownload(DownloadFile::ON_COMPLETE_CALLBACK cbComplete)
 		downloader != 0) return false;
 
 	//create downloader
-	this->downloader = new DownloadFile(this->getVoiceID(), this->getServerFile(), this->getLocalFile(), cbComplete);
+	this->downloader = new DownloadFile(this->getVoiceID(), this->getServerFile(), 
+		this->getLocalAmrFile(), this->getLocalWavFile(),
+		cbComplete);
 	if(!(this->downloader->beginDownloadThread())) return false;
 
 	this->localStatus = DOWNLOADING;
