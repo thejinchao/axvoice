@@ -28,7 +28,7 @@ public class MainCamera : MonoBehaviour {
 		m_dataPath=Path.GetTempPath();
 	#endif
 			Debug.Log("datapath=" + m_dataPath);
-  		CallAxVoice.Init(m_dataPath, "http://www.dashengine.com/upload_voice");
+  		CallAxVoice.Init(m_dataPath, "http://www.dashengine.com/upload_voice", "54bef90a");
 	}
 	
 	// Update is called once per frame
@@ -108,20 +108,25 @@ public class MainCamera : MonoBehaviour {
 
 
 		GUILayout.BeginHorizontal();  
-    if(GUILayout.Button("Download", GUILayout.Width(m_windowWidth/3), GUILayout.Height(m_lineHeight)))
+    if(GUILayout.Button("Download", GUILayout.Width(m_windowWidth/4), GUILayout.Height(m_lineHeight)))
     {
     	CallAxVoice.DownloadVoice(System.UInt32.Parse(m_voiceID));
 			Debug.Log("Begin Download Voice, voiceid=" + currentVoiceID);
     }
-    if(GUILayout.Button("Play", GUILayout.Width(m_windowWidth/3), GUILayout.Height(m_lineHeight)))
+    if(GUILayout.Button("Play", GUILayout.Width(m_windowWidth/4), GUILayout.Height(m_lineHeight)))
     {
     	CallAxVoice.PlayVoice(System.UInt32.Parse(m_voiceID));
 			Debug.Log("Begin Play Voice, voiceid=" + currentVoiceID);
     }
-    if(GUILayout.Button("Stop", GUILayout.Width(m_windowWidth/3), GUILayout.Height(m_lineHeight)))
+    if(GUILayout.Button("Stop", GUILayout.Width(m_windowWidth/4), GUILayout.Height(m_lineHeight)))
     {
     	CallAxVoice.StopVoice();
 			Debug.Log("Stop Current Voice");
+    }
+    if(GUILayout.Button("Text", GUILayout.Width(m_windowWidth/4), GUILayout.Height(m_lineHeight)))
+    {
+    	CallAxVoice.Voice2Text(System.UInt32.Parse(m_voiceID));
+			Debug.Log("Convert To Text");
     }
     GUILayout.EndHorizontal();  
 
@@ -163,7 +168,10 @@ public class MainCamera : MonoBehaviour {
 	void _OnAxVoicePlayMessage(string args)	{
 		OnAxVoicePlayMessage(args.Split('|'));
 	}	
-	
+	void _OnAxVoiceTextMessage(string args)	{
+		OnAxVoiceTextMessage(args.Split('|'));
+	}	
+		
 	void OnAxVoiceRecordMessage(string[] args)
 	{
 		uint voiceID = System.UInt32.Parse(args[0]);
@@ -216,6 +224,21 @@ public class MainCamera : MonoBehaviour {
 		if(type == "complete")
 		{
 			Debug.Log("Play complete, voiceid=" + voiceID);
+		}
+	}
+	
+	void OnAxVoiceTextMessage(string[] args)
+	{
+		uint voiceID = System.UInt32.Parse(args[0]);
+		string type = args[1];
+		string success = args[2];
+		string result = args[3];
+		if(type == "complete")
+		{
+			Debug.Log("Convert To Text complete, voiceid=" + voiceID + ", success=" + success + ", result=" + result);
+		}else if(type == "failed")
+		{
+			Debug.Log("Convert To Text failed!, voiceid=" + voiceID + ", success=" + success + ", result=" + result);
 		}
 	}
 }

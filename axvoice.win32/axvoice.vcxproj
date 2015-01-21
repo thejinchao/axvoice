@@ -92,6 +92,7 @@
     <ClCompile Include="AV_OpenCoreWrap.cpp" />
     <ClCompile Include="AV_UploadFile.cpp" />
     <ClCompile Include="AV_Util.cpp" />
+    <ClCompile Include="AV_Voice2TextWrap.cpp" />
     <ClCompile Include="AV_VoiceItem.cpp" />
     <ClCompile Include="AV_VoiceManager.cpp" />
     <ClCompile Include="AV_VoicePlayer.cpp" />
@@ -121,6 +122,7 @@
     <ClInclude Include="AV_OpenCoreWrap.h" />
     <ClInclude Include="AV_UploadFile.h" />
     <ClInclude Include="AV_Util.h" />
+    <ClInclude Include="AV_Voice2TextWrap.h" />
     <ClInclude Include="AV_VoiceItem.h" />
     <ClInclude Include="AV_VoiceManager.h" />
     <ClInclude Include="AV_VoicePlayer.h" />

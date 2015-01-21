@@ -4,9 +4,10 @@
 #include "AV_VoiceRecorder.h"
 #include "AV_VoicePlayer.h"
 #include "AV_MessageQueue.h"
+#include "AV_Voice2TextWrap.h"
 
 //--------------------------------------------------------------------------------------------
-void initGlobalValue(void)
+void initGlobalValue(HINSTANCE hinstDLL)
 {
 	InitializeCriticalSection(&g_lockInterface);
 
@@ -16,6 +17,7 @@ void initGlobalValue(void)
 	PathAppendA(szTempPath, "axvoice_cache_audio");
 	::CreateDirectoryA(szTempPath, 0);
 
+	g_hModuleHandle = hinstDLL;
 	g_cacheAudioPath = szTempPath;
 
 	//create message queue
@@ -29,6 +31,9 @@ void initGlobalValue(void)
 
 	//create audio player
 	new VoicePlayer();
+
+	//create ifly engine
+	new IFlyEngine();
 }
 
 //--------------------------------------------------------------------------------------------
@@ -52,7 +57,7 @@ BOOL WINAPI DllMain(
 	{
 	case DLL_PROCESS_ATTACH:
 		// init global value
-		initGlobalValue();
+		initGlobalValue(hinstDLL);
 		break;
 
 	case DLL_PROCESS_DETACH:

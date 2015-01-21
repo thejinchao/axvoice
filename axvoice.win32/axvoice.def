@@ -9,6 +9,5 @@ EXPORTS
 	AxVoice_PlayVoice
 	AxVoice_StopVoice
 	AxVoice_DispatchMessage
-
-
+	AxVoice_Voice2Text
 

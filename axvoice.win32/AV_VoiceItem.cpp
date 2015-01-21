@@ -12,7 +12,8 @@ VoiceItem::VoiceItem(unsigned int _voiceID,
 		const char* _fileMD5, 
 		const char* _serverURL,
 		LocalStatus _localStatus, 
-		ServerStatus _serverStatus)
+		ServerStatus _serverStatus,
+		ToTextStatus _toTextStatus)
 	: voiceID(_voiceID)
 	, localAmrFile(_localAmrFile ? _localAmrFile : "")
 	, localWavFile(_localWavFile ? _localWavFile : "")
@@ -20,6 +21,7 @@ VoiceItem::VoiceItem(unsigned int _voiceID,
 	, serverURL(_serverURL ? _serverURL : "")
 	, localStatus(_localStatus)
 	, serverStatus(_serverStatus)
+	, toTextStatus(_toTextStatus)
 	, uploader(0)
 	, downloader(0)
 {
@@ -99,3 +101,25 @@ bool VoiceItem::beginDownload(DownloadFile::ON_COMPLETE_CALLBACK cbComplete)
 	return true;
 }
 
+//--------------------------------------------------------------------------------------------
+bool VoiceItem::beginConvertToText(void)
+{
+	//check status
+	if(	getLocalStatus() != HAS_LOCAL_FILE ||
+		getTextStatus() != NO_TEXT) return false;
+
+	toTextStatus = CONVERTING;
+	return true;
+}
+
+//--------------------------------------------------------------------------------------------
+bool VoiceItem::setText(const char* text)
+{
+	//check status
+	if(	getLocalStatus() != HAS_LOCAL_FILE ||
+		getTextStatus() != CONVERTING) return false;
+
+	toTextStatus = HAS_TEXT;
+	strText = text;
+	return true;
+}

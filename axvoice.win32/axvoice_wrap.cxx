@@ -445,15 +445,17 @@ void SwigDirector_AxVoiceCallback::swig_init_callbacks() {
 extern "C" {
 #endif
 
-SWIGEXPORT unsigned int SWIGSTDCALL CSharp_AxVoice_Init(char * jarg1, char * jarg2) {
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_AxVoice_Init(char * jarg1, char * jarg2, char * jarg3) {
   unsigned int jresult ;
   char *arg1 = (char *) 0 ;
   char *arg2 = (char *) 0 ;
+  char *arg3 = (char *) 0 ;
   bool result;
   
   arg1 = (char *)jarg1; 
   arg2 = (char *)jarg2; 
-  result = (bool)AxVoice_Init((char const *)arg1,(char const *)arg2);
+  arg3 = (char *)jarg3; 
+  result = (bool)AxVoice_Init((char const *)arg1,(char const *)arg2,(char const *)arg3);
   jresult = result; 
   return jresult;
 }
@@ -515,6 +517,18 @@ SWIGEXPORT void SWIGSTDCALL CSharp_AxVoice_PlayVoice(unsigned int jarg1) {
 
 SWIGEXPORT void SWIGSTDCALL CSharp_AxVoice_StopVoice() {
   AxVoice_StopVoice();
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_AxVoice_Voice2Text(unsigned int jarg1) {
+  unsigned int jresult ;
+  unsigned int arg1 ;
+  bool result;
+  
+  arg1 = (unsigned int)jarg1; 
+  result = (bool)AxVoice_Voice2Text(arg1);
+  jresult = result; 
+  return jresult;
 }
 
 

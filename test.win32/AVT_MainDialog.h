@@ -25,6 +25,8 @@ public:
 		COMMAND_ID_HANDLER(IDC_BUTTON_DOWNLOAD, OnDownloadButton);
 		COMMAND_ID_HANDLER(IDC_BUTTON_PLAY, OnPlayButton);
 		COMMAND_ID_HANDLER(IDC_BUTTON_STOP, OnStopButton);
+		COMMAND_ID_HANDLER(IDC_BUTTON_TO_TEXT, OnToTextButton);
+		
 		REFLECT_NOTIFICATIONS()
 	END_MSG_MAP()
 
@@ -36,6 +38,7 @@ public:
 	LRESULT OnDownloadButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 	LRESULT OnPlayButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 	LRESULT OnStopButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
+	LRESULT OnToTextButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 
 	/*************************************************************************
 	Implementation Methods

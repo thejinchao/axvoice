@@ -35,7 +35,7 @@ VoiceItem* VoiceManager::allocateNewItem(void)
 	::PathRenameExtensionA(localWavFilePath, ".wav");
 
 	VoiceItem *item = new VoiceItem(currentTime, locaAmrlFilePath, localWavFilePath, 0, 0, 
-		VoiceItem::NO_LOCAL_FILE, VoiceItem::NO_SERVER_FILE);
+		VoiceItem::NO_LOCAL_FILE, VoiceItem::NO_SERVER_FILE, VoiceItem::NO_TEXT);
 	{
 		m_voiceMap.insert(std::make_pair(item->getVoiceID(), item));
 	}

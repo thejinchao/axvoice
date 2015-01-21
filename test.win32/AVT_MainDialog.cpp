@@ -24,7 +24,7 @@ LRESULT CMainDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 	PathAppendA(szTempPath, "axvoice_cache_audio");
 	::CreateDirectoryA(szTempPath, 0);
 
-	AxVoice_Init(szTempPath, "http://www.dashengine.com/upload_voice");
+	AxVoice_Init(szTempPath, "http://www.dashengine.com/upload_voice", "54bef90a");
 
 	m_axvoiceCallback = new Callback(this);
 
@@ -135,6 +135,19 @@ void CMainDialog::onAxVoiceMessage(const AxVoiceMessage* message)
 
 		}
 		break;
+
+	case AxVoiceMessage::MT_TOTXT_MSG:
+		{
+			int counts = message->getParamCounts();
+			std::string p0 = message->getParam(0);
+			std::string p1 = message->getParam(1);
+			std::string p2= message->getParam(2);
+			if( p0 == "complete")
+			{
+				MessageBoxA(m_hWnd, p2.c_str(), p1.c_str(), MB_OK);
+			}
+		}
+		break;
 	}
 }
 
@@ -173,3 +186,11 @@ LRESULT CMainDialog::OnStopButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL
 	return 0;
 }
 
+//--------------------------------------------------------------------------------------------
+LRESULT CMainDialog::OnToTextButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
+{
+	m_currentID = ::GetDlgItemInt(m_hWnd, IDC_EDIT_VOICE_ID, 0, FALSE);
+	AxVoice_Voice2Text(m_currentID);
+
+	return 0;
+}

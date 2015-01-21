@@ -15,18 +15,24 @@
 #include "AV_VoicePlayer.h"
 #include "AV_Util.h"
 #include "AV_MessageQueue.h"
+#include "AV_Voice2TextWrap.h"
 
 //--------------------------------------------------------------------------------------------
-bool AxVoice_Init(const char* cachePath, const char* uploadURL)
+bool AxVoice_Init(const char* cachePath, const char* uploadURL, const char* iflyID)
 {
 	AutoLock autoLock(&g_lockInterface);
 
+	bool success = true;
 	if(cachePath&&cachePath[0]!=0)
 		g_cacheAudioPath = cachePath;
 
 	if(uploadURL && uploadURL[0]!=0)
 		g_uploadURL = uploadURL;
-	return true;
+
+	if(iflyID && iflyID[0]!=0)
+		success = IFlyEngine::getInstance()->initEngine(iflyID);
+
+	return success;
 }
 
 //--------------------------------------------------------------------------------------------
@@ -228,3 +234,36 @@ void AxVoice_DispatchMessage(AxVoiceCallback* cb)
 	MessageQueue::getInstance()->dispatchMessage(cb);
 }
 
+//--------------------------------------------------------------------------------------------
+void CALLBACK _onConvertToTextCompleteCallback(unsigned int voiceID, bool success, const std::string& strText)
+{
+	if(!success) return;
+
+	{
+		AutoLock autoLock(&g_lockInterface);
+
+		VoiceItem* item = VoiceManager::getInstance()->findItem(voiceID);
+		if(item==0) return; //TODO: ERROR
+	
+		item->setText(strText.c_str());
+	}
+}
+
+//--------------------------------------------------------------------------------------------
+bool AxVoice_Voice2Text(unsigned int voiceID)
+{
+	AutoLock autoLock(&g_lockInterface);
+
+	//find the voice item
+	VoiceItem* item = VoiceManager::getInstance()->findItem(voiceID);
+	if(item==0) return false; //TODO: ERROR
+
+	if(item->getLocalStatus() != VoiceItem::HAS_LOCAL_FILE)
+	{
+		//TODO: ERROR
+		return false;
+	}
+
+	//begin send to server
+	return IFlyEngine::getInstance()->beginConvertVoice(voiceID, _onConvertToTextCompleteCallback);
+}

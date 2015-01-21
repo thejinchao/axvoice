@@ -63,6 +63,9 @@
     <ClCompile Include="AV_MessageQueue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AV_Voice2TextWrap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AV_Global.h">
@@ -111,6 +114,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AV_Voice2TextWrap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

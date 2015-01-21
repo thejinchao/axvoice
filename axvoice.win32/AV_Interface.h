@@ -9,8 +9,12 @@
 #ifndef __AXVOICE_INTERFACE__
 #define __AXVOICE_INTERFACE__
 
-/** Init axvoice */
-bool AxVoice_Init(const char* cachePath, const char* uploadURL);
+/** Init axvoice 
+@param cachePath local work path
+@param uploadURL url to upload amr file
+@param iflyID ifly engine id(http://www.voicecloud.cn), null mean not load
+*/
+bool AxVoice_Init(const char* cachePath, const char* uploadURL, const char* iflyID);
 
 /** Begin record @return = voiceID */
 unsigned int AxVoice_BeginRecord(void);
@@ -33,6 +37,9 @@ void AxVoice_PlayVoice(unsigned int voiceID);
 /** stop play current voice*/
 void AxVoice_StopVoice(void);
 
+/** send voice to ifly server*/
+bool AxVoice_Voice2Text(unsigned int voiceID);
+
 class AxVoiceMessage
 {
 public:
@@ -42,6 +49,7 @@ public:
 		MT_UPLOAD_MSG=2,
 		MT_DOWNLOAD_MSG=3,
 		MT_PLAY_MSG=4,
+		MT_TOTXT_MSG=5,
 	};
 
 	virtual Type getType(void) const = 0;
