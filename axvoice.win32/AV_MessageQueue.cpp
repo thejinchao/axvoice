@@ -72,9 +72,10 @@ void MessageQueue::dispatchMessage(AxVoiceCallback* cb)
 
 	while(!m_msgQueue.empty())
 	{
-		const Message& msg = m_msgQueue.front();
-		cb->onMessage(&msg);
+		Message msg = m_msgQueue.front();
 		m_msgQueue.pop();
+
+		cb->onMessage(&msg);
 	}
 }
 
