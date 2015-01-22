@@ -144,7 +144,9 @@ void CMainDialog::onAxVoiceMessage(const AxVoiceMessage* message)
 			std::string p2= message->getParam(2);
 			if( p0 == "complete")
 			{
-				MessageBoxA(m_hWnd, p2.c_str(), p1.c_str(), MB_OK);
+				wchar_t wszTemp[1024]={0};
+				_encode_utf8_to_ucs(p2.c_str(), wszTemp, 1024, p2.length());
+				MessageBoxW(wszTemp, L"Text", MB_OK);
 			}
 		}
 		break;
@@ -193,4 +195,51 @@ LRESULT CMainDialog::OnToTextButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BO
 	AxVoice_Voice2Text(m_currentID);
 
 	return 0;
+}
+
+//------------------------------------------------------------------------------------------------------------------
+unsigned int CMainDialog::_encode_utf8_to_ucs(const char* utf8_src, wchar_t* dest, unsigned int dest_len, unsigned int src_len)
+{
+	// count length for null terminated source...
+	if (src_len == 0)
+	{
+		src_len = (unsigned int)strlen(utf8_src);
+	}
+
+	unsigned int destCapacity = dest_len;
+
+	// while there is data in the source buffer, and space in the dest buffer
+	for (unsigned int idx = 0; ((idx < src_len) && (destCapacity > 0));)
+	{
+		wchar_t	cp;
+		unsigned char	cu = utf8_src[idx++];
+
+		if (cu < 0x80)
+		{
+			cp = (wchar_t)(cu);
+		}
+		else if (cu < 0xE0)
+		{
+			cp = ((cu & 0x1F) << 6);
+			cp |= (utf8_src[idx++] & 0x3F);
+		}
+		else if (cu < 0xF0)
+		{
+			cp = ((cu & 0x0F) << 12);
+			cp |= ((utf8_src[idx++] & 0x3F) << 6);
+			cp |= (utf8_src[idx++] & 0x3F);
+		}
+		else
+		{
+			cp = ((cu & 0x07) << 18);
+			cp |= ((utf8_src[idx++] & 0x3F) << 12);
+			cp |= ((utf8_src[idx++] & 0x3F) << 6);
+			cp |= (utf8_src[idx++] & 0x3F);
+		}
+
+		*dest++ = cp;
+		--destCapacity;
+	}
+
+	return dest_len - destCapacity;
 }

@@ -56,6 +56,7 @@ private:
 	};
 
 	void onAxVoiceMessage(const AxVoiceMessage* message);
+	static unsigned int _encode_utf8_to_ucs(const char* utf8_src, wchar_t* dest, unsigned int dest_len, unsigned int src_len);
 
 	/*************************************************************************
 	Implementation Data
