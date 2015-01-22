@@ -52,8 +52,8 @@ bool writeWavFileHead(HANDLE hFile, size_t fmtDataSize)
 	//write wave format
 	WAVE_FORMAT wf= {WAVE_FORMAT_PCM, 
 		1, //mono channel
-		16000, //16khz
-		32000, 
+		8000, //16khz
+		16000, 
 		2, 
 		16};
 	XCHUNKHEADER chunk;

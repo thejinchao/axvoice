@@ -22,8 +22,8 @@ VoiceRecorder::VoiceRecorder()
 
 	m_waveformat.wFormatTag = WAVE_FORMAT_PCM;
 	m_waveformat.nChannels = 1;
-	m_waveformat.nSamplesPerSec = 16000;
-	m_waveformat.nAvgBytesPerSec = 32000;
+	m_waveformat.nSamplesPerSec = 8000;
+	m_waveformat.nAvgBytesPerSec = 16000;
 	m_waveformat.nBlockAlign = 2;
 	m_waveformat.wBitsPerSample = 16;
 	m_waveformat.cbSize = 0;

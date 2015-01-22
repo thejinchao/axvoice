@@ -111,7 +111,7 @@ bool Voice2TextSession::convertThread(std::string& result, std::string& error)
 	}
 
 	//begin a session
-	const char* param = "sub=iat,auf=audio/L16;rate=16000,aue=raw,ent=sms16k,rst=plain,rse=utf8";//可参考可设置参数列表
+	const char* param = "sub=iat,auf=audio/L16;rate=8000,aue=speex,ent=sms8k,rst=plain,rse=utf8";
 	const char *sessionID = QISRSessionBegin(NULL, param, &errCode);
 	if(errCode != MSP_SUCCESS)
 	{
