@@ -17,6 +17,11 @@
 		CE96382C1A4AA7CF00C374FD /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE96382B1A4AA7CF00C374FD /* AVFoundation.framework */; };
 		CE96384E1A4BA4CB00C374FD /* libopencore-amrnb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE96384D1A4BA4CB00C374FD /* libopencore-amrnb.a */; };
 		CEDA803D1A6D229B00FB4DB2 /* libaxvoice.ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEDA803C1A6D229B00FB4DB2 /* libaxvoice.ios.a */; };
+		CEEB60B91A6FE3FA00A0C08E /* iflyMSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEEB60B81A6FE3FA00A0C08E /* iflyMSC.framework */; };
+		CEEB60BB1A6FE47200A0C08E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEEB60BA1A6FE47200A0C08E /* SystemConfiguration.framework */; };
+		CEEB60BD1A6FE47E00A0C08E /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEEB60BC1A6FE47E00A0C08E /* CoreTelephony.framework */; };
+		CEEB60BF1A6FE7FA00A0C08E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CEEB60BE1A6FE7FA00A0C08E /* libz.dylib */; };
+		CEEB60C11A6FEDB600A0C08E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEEB60C01A6FEDB600A0C08E /* AudioToolbox.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +40,11 @@
 		CE96382E1A4AA97300C374FD /* axvoice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = axvoice.h; path = ../axvoice.ios/axvoice.ios/axvoice.h; sourceTree = "<group>"; };
 		CE96384D1A4BA4CB00C374FD /* libopencore-amrnb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libopencore-amrnb.a"; path = "../axvoice.ios/axvoice.ios/opencore-amr/libopencore-amrnb.a"; sourceTree = "<group>"; };
 		CEDA803C1A6D229B00FB4DB2 /* libaxvoice.ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libaxvoice.ios.a; path = "../../../../Library/Developer/Xcode/DerivedData/axvoice-dfshwlxusszcfnfrexdzfpahfnvv/Build/Products/Release-iphoneos/libaxvoice.ios.a"; sourceTree = "<group>"; };
+		CEEB60B81A6FE3FA00A0C08E /* iflyMSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iflyMSC.framework; path = ../libifly/iOS/iflyMSC.framework; sourceTree = "<group>"; };
+		CEEB60BA1A6FE47200A0C08E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		CEEB60BC1A6FE47E00A0C08E /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		CEEB60BE1A6FE7FA00A0C08E /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		CEEB60C01A6FEDB600A0C08E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +52,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEEB60C11A6FEDB600A0C08E /* AudioToolbox.framework in Frameworks */,
+				CEEB60BF1A6FE7FA00A0C08E /* libz.dylib in Frameworks */,
+				CEEB60BD1A6FE47E00A0C08E /* CoreTelephony.framework in Frameworks */,
+				CEEB60BB1A6FE47200A0C08E /* SystemConfiguration.framework in Frameworks */,
+				CEEB60B91A6FE3FA00A0C08E /* iflyMSC.framework in Frameworks */,
 				CEDA803D1A6D229B00FB4DB2 /* libaxvoice.ios.a in Frameworks */,
 				CE96382C1A4AA7CF00C374FD /* AVFoundation.framework in Frameworks */,
 				CE96384E1A4BA4CB00C374FD /* libopencore-amrnb.a in Frameworks */,
@@ -106,6 +121,11 @@
 		CE9638301A4AAA0000C374FD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CEEB60C01A6FEDB600A0C08E /* AudioToolbox.framework */,
+				CEEB60BE1A6FE7FA00A0C08E /* libz.dylib */,
+				CEEB60BC1A6FE47E00A0C08E /* CoreTelephony.framework */,
+				CEEB60BA1A6FE47200A0C08E /* SystemConfiguration.framework */,
+				CEEB60B81A6FE3FA00A0C08E /* iflyMSC.framework */,
 				CEDA803C1A6D229B00FB4DB2 /* libaxvoice.ios.a */,
 				CE96382B1A4AA7CF00C374FD /* AVFoundation.framework */,
 			);
@@ -300,6 +320,10 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/jinchao/Documents/App/axvoice/libifly/iOS,
+				);
 				INFOPLIST_FILE = test.ios/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -317,6 +341,10 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/jinchao/Documents/App/axvoice/libifly/iOS,
+				);
 				INFOPLIST_FILE = test.ios/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (

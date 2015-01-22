@@ -13,7 +13,8 @@ typedef enum {
     MT_RECORD_MSG = 1,
     MT_UPLOAD_MSG = 2,
     MT_DOWNLOAD_MSG = 3,
-    MT_PLAY_MSG = 4
+    MT_PLAY_MSG = 4,
+    MT_TOTXT_MSG = 5
 } MessageType;
 
 @interface VoiceMessage : NSObject

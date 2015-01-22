@@ -23,6 +23,8 @@
 		CE96385B1A4D140E00C374FD /* VoicePlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = CE96385A1A4D140E00C374FD /* VoicePlayer.m */; };
 		CEB811261A4D31AC00D17F40 /* MessageQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = CEB811251A4D31AC00D17F40 /* MessageQueue.m */; };
 		CEB811291A4D39AC00D17F40 /* UnityInterface.mm in Sources */ = {isa = PBXBuildFile; fileRef = CEB811271A4D39AC00D17F40 /* UnityInterface.mm */; };
+		CEEB60B31A6FDF8000A0C08E /* Voice2TextWrap.m in Sources */ = {isa = PBXBuildFile; fileRef = CEEB60B21A6FDF8000A0C08E /* Voice2TextWrap.m */; };
+		CEEB60B71A6FE31F00A0C08E /* iflyMSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEEB60B61A6FE31F00A0C08E /* iflyMSC.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -71,6 +73,9 @@
 		CEB811241A4D319C00D17F40 /* MessageQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageQueue.h; sourceTree = "<group>"; };
 		CEB811251A4D31AC00D17F40 /* MessageQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageQueue.m; sourceTree = "<group>"; };
 		CEB811271A4D39AC00D17F40 /* UnityInterface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UnityInterface.mm; sourceTree = "<group>"; };
+		CEEB60B21A6FDF8000A0C08E /* Voice2TextWrap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Voice2TextWrap.m; sourceTree = "<group>"; };
+		CEEB60B41A6FDFA400A0C08E /* Voice2TextWrap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Voice2TextWrap.h; sourceTree = "<group>"; };
+		CEEB60B61A6FE31F00A0C08E /* iflyMSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iflyMSC.framework; path = ../libifly/iOS/iflyMSC.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEEB60B71A6FE31F00A0C08E /* iflyMSC.framework in Frameworks */,
 				CE96384C1A4BA4B000C374FD /* libopencore-amrnb.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -88,6 +94,7 @@
 		CE9637D31A4AA48200C374FD = {
 			isa = PBXGroup;
 			children = (
+				CEEB60B51A6FE2EC00A0C08E /* Frameworks */,
 				CE9637DE1A4AA48200C374FD /* axvoice.ios */,
 				CE9637DD1A4AA48200C374FD /* Products */,
 			);
@@ -131,6 +138,8 @@
 				CEB811271A4D39AC00D17F40 /* UnityInterface.mm */,
 				CE74DEE41A4DAF000041B6C7 /* VoiceMessage.h */,
 				CE74DEE51A4DAF280041B6C7 /* VoiceMessage.m */,
+				CEEB60B41A6FDFA400A0C08E /* Voice2TextWrap.h */,
+				CEEB60B21A6FDF8000A0C08E /* Voice2TextWrap.m */,
 			);
 			path = axvoice.ios;
 			sourceTree = "<group>";
@@ -145,6 +154,14 @@
 				CE9638491A4BA3FB00C374FD /* OpenCoreWrap.c */,
 			);
 			name = "opencore-amr";
+			sourceTree = "<group>";
+		};
+		CEEB60B51A6FE2EC00A0C08E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CEEB60B61A6FE31F00A0C08E /* iflyMSC.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -208,6 +225,7 @@
 				CE9638541A4BC11300C374FD /* UtilFunctions.m in Sources */,
 				CE9638321A4AAB9A00C374FD /* VoiceItem.m in Sources */,
 				CE9638391A4B0F0200C374FD /* VoiceRecorder.m in Sources */,
+				CEEB60B31A6FDF8000A0C08E /* Voice2TextWrap.m in Sources */,
 				CEB811261A4D31AC00D17F40 /* MessageQueue.m in Sources */,
 				CE96383C1A4B99C600C374FD /* VoiceConverter.m in Sources */,
 				CE96385B1A4D140E00C374FD /* VoicePlayer.m in Sources */,
@@ -302,6 +320,10 @@
 		CE9637F11A4AA48200C374FD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/jinchao/Documents/App/axvoice/libifly/iOS,
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/axvoice.ios/opencore-amr",
@@ -315,6 +337,10 @@
 		CE9637F21A4AA48200C374FD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/jinchao/Documents/App/axvoice/libifly/iOS,
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/axvoice.ios/opencore-amr",

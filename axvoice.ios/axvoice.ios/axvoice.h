@@ -13,7 +13,8 @@
 @interface axvoice : NSObject
 
 +(void)initAxVoice: (NSString*)cachePath
-        uploadURL : (NSString*)uploadURL;
+        uploadURL : (NSString*)uploadURL
+           iFlyID : (NSString*)iFlyID;
 
 +(uint)beginRecord;
 
@@ -32,5 +33,7 @@
 +(void)dispatchMessage : (id<MessageCallBack>) delegate;
 
 +(void)dispatchMessage_Unity : (NSString*) callbackObject;
+
++(void)voice2Text: (uint) voiceID;
 
 @end

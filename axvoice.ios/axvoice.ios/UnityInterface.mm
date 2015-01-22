@@ -23,17 +23,17 @@ NSString* CreateNSString (const char* string)
 {
     UnitySendMessage([nameObject cStringUsingEncoding:NSASCIIStringEncoding],
                      [functionName cStringUsingEncoding:NSASCIIStringEncoding],
-                     [params cStringUsingEncoding:NSASCIIStringEncoding]);
-  // */
+                     [params cStringUsingEncoding:NSUTF8StringEncoding]);
 }
 
 @end
 
 extern "C" {
-    void _initAxVoice(const char* cachePath, const char* uploadURL)
+    void _initAxVoice(const char* cachePath, const char* uploadURL, const char* iflyID)
     {
         [axvoice initAxVoice : CreateNSString(cachePath)
-                    uploadURL: CreateNSString(uploadURL)];
+                    uploadURL: CreateNSString(uploadURL)
+                      iFlyID : CreateNSString(iflyID)];
     }
     
     unsigned int _beginRecord(void)
@@ -63,7 +63,6 @@ extern "C" {
     
     void _playVoice(unsigned int voiceID)
     {
-        NSLog(@"***play voice%d", voiceID);
         [axvoice playVoice:voiceID];
     }
     
@@ -75,6 +74,11 @@ extern "C" {
     void _dispatchMessage(const char* callbackObject)
     {
         [axvoice dispatchMessage_Unity : CreateNSString(callbackObject)];
+    }
+    
+    void _voice2Text(uint voiceID)
+    {
+        [axvoice voice2Text:voiceID];
     }
 }
 

@@ -56,8 +56,10 @@
                                              localAmrFile:amrFile
                                                 serverURL:@""
                                                   fileMD5:@""
+                                                     text:@""
                                               localStatus:NO_LOCAL_FILE
-                                             serverStatus:NO_SERVER_FILE];
+                                             serverStatus:NO_SERVER_FILE
+                                             toTextStatus:NO_TEXT];
     NSLog(@"Alloc new voice item:id=%d, local=%@", newItem.voiceID, newItem.localWavFile);
     
     [voiceMap setObject:newItem forKey:[NSString stringWithFormat:@"%d", voiceID]];

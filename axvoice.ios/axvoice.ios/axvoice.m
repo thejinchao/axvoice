@@ -16,7 +16,7 @@
 #import "DownloadFile.h"
 #import "VoicePlayer.h"
 #import "MessageQueue.h"
-
+#import "Voice2TextWrap.h"
 
 @interface UploadCallback : NSObject <UploadCallBackProtocol>
 {
@@ -146,18 +146,66 @@
 
 @end
 
+@interface ConvertCallBack : NSObject < ConvertCallBackProtocol >
+{
+    
+}
+
+- (void) onConvertComplete : (uint)voiceID
+                 strResult : (NSString*) strResult;
+- (void) onConvertFailed : (uint)voiceID
+                  reason : (NSString*) reason;
+
+@end
+
+@implementation ConvertCallBack
+
+- (void) onConvertComplete : (uint)voiceID
+                 strResult : (NSString*) strResult
+{
+    VoiceManager* manager = [VoiceManager sharedInstance];
+    
+    @synchronized(manager) {
+        VoiceItem * item  = [manager findItem:voiceID];
+        if(item == nil)return; //TODO: ERROR
+        
+        //after convert
+        [item setText:true text:strResult];
+    }
+}
+
+- (void) onConvertFailed : (uint)voiceID
+                  reason : (NSString*) reason
+{
+    VoiceManager* manager = [VoiceManager sharedInstance];
+    
+    @synchronized(manager) {
+        VoiceItem * item  = [manager findItem:voiceID];
+        if(item == nil)return; //TODO: ERROR
+        
+        //after convert
+        [item setText:false text:nil];
+    }
+}
+@end
 
 @implementation axvoice
 
 
 +(void)initAxVoice:(NSString *)cachePath
          uploadURL:(NSString *)uploadURL
+           iFlyID : (NSString*)iFlyID;
 {
     @synchronized(self) {
         [Config sharedInstance : cachePath
                       uploadURL:uploadURL];
         
         [VoiceManager sharedInstance];
+        
+        //init ifly engine
+        if([iFlyID length] !=0) {
+            [[IFlyEngine sharedInstance] initEngine : iFlyID];
+        }
         
         NSLog(@"***axvoice init: cachePath=%@, uploadURL=%@", [Config cacheAudioPath], [Config uploadURL]);
     }
@@ -305,6 +353,22 @@
     @synchronized(self) {
         [[MessageQueue sharedInstance] dispatchMessage_Unity:callbackObject];
     }
+}
+
++(void)voice2Text: (uint) voiceID
+{
+    VoiceManager* manager = [VoiceManager sharedInstance];
+    @synchronized(manager) {
+        VoiceItem * item  = [manager findItem:voiceID];
+        if(item == nil)return; //TODO: ERROR
+        
+        if(item.localStatus != HAS_LOCAL_FILE) return; //TODO: ERROR
+        ConvertCallBack* callback = [[ConvertCallBack alloc] init];
+        
+        [[IFlyEngine sharedInstance] beginConvert2Voice:voiceID
+                                              delegate :callback];
+    }
+
 }
 
 @end

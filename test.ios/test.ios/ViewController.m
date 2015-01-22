@@ -32,6 +32,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnRecord;
 @property (weak, nonatomic) IBOutlet UITextField *textURL;
 @property (weak, nonatomic) IBOutlet UITextField *textVoiceID;
+@property (weak, nonatomic) IBOutlet UITextView *textResult;
 
 @end
 
@@ -53,7 +54,7 @@
         [fileManager createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:nil];
     }
     
-    [axvoice initAxVoice:directory uploadURL:nil] ; 
+    [axvoice initAxVoice:directory uploadURL:nil iFlyID:@"54be5c4f"] ;
     
     _callback = [[VoiceMessageCallback alloc] init];
     _callback.viewControl = self;
@@ -103,6 +104,10 @@
 }
 - (IBAction)onStopClick {
     [axvoice stopVoice];
+}
+- (IBAction)onTextClick {
+    _textResult.text = nil;
+    [axvoice voice2Text:voice_id];
 }
 
 - (IBAction)onServerURLDebugGet {
@@ -195,6 +200,18 @@
             
             NSLog(@"MT_PLAY_MSG: id=%d type=%@", voiceID, type);
             
+        }
+            break;
+            
+        case MT_TOTXT_MSG:
+        {
+            NSString* type = [[msg params] objectAtIndex:0];
+            NSString* success = [[msg params] objectAtIndex:1];
+            NSString* result = [[msg params] objectAtIndex:2];
+            
+            NSLog(@"MT_TOTXT_MSG: id=%d type=%@, suc=%@, result=%@", voiceID, type, success, result);
+            
+            _viewControl.textResult.text = [NSString stringWithFormat:@"suc=%@\nresult=%@", success, result];
         }
             break;
         default:

@@ -125,6 +125,13 @@
                                             functionName : @"_OnAxVoicePlayMessage"
                                                   params : [self union_params:msg]];
                     break;
+                    
+                case MT_TOTXT_MSG:
+                    [UnityInterface UnitySendMessageWrap : callbackObj
+                                            functionName : @"_OnAxVoiceTextMessage"
+                                                  params : [self union_params:msg]];
+                    break;
+                    
             }
         }
         

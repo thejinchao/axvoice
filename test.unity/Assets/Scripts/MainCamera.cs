@@ -12,7 +12,7 @@ public class MainCamera : MonoBehaviour {
 	private bool recordStatus = false;
 	private Rect windowRect;
 	private string m_dataPath;
-	
+	private string strResult = "";
 	private string m_serverURL = ""; 
 	private string m_voiceID = "";
 	private int m_lineHeight, m_windowWidth;
@@ -21,14 +21,16 @@ public class MainCamera : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 	#if UNITY_IPHONE 
+		string iflyID = "54be5c4f";
 		m_dataPath=Path.GetTempPath();
 	#elif UNITY_ANDROID
 		m_dataPath=Application.persistentDataPath;
 	#else
+		string iflyID = "54bef90a";
 		m_dataPath=Path.GetTempPath();
 	#endif
 			Debug.Log("datapath=" + m_dataPath);
-  		CallAxVoice.Init(m_dataPath, "http://www.dashengine.com/upload_voice", "54bef90a");
+  		CallAxVoice.Init(m_dataPath, "http://www.dashengine.com/upload_voice", iflyID);
 	}
 	
 	// Update is called once per frame
@@ -53,7 +55,7 @@ public class MainCamera : MonoBehaviour {
 		int screenWidth = Screen.width;
 		int screenHeight = Screen.height;
 		m_windowWidth = screenWidth-100;
-		int windowHeight = 5*m_lineHeight;
+		int windowHeight = 10*m_lineHeight;
 		int windowX = (screenWidth-m_windowWidth)/2;
 		int windowY = (screenHeight-windowHeight)/2;
 		windowRect = new Rect(windowX, windowY, m_windowWidth, windowHeight);
@@ -130,7 +132,7 @@ public class MainCamera : MonoBehaviour {
     }
     GUILayout.EndHorizontal();  
 
-		GUILayout.Space(m_lineHeight);
+		GUILayout.Label(strResult, GUILayout.Height(m_lineHeight*2));
 
 		if(GUILayout.RepeatButton(recordButtonText, GUILayout.Height(m_lineHeight*2))) 
 		{
@@ -235,9 +237,11 @@ public class MainCamera : MonoBehaviour {
 		string result = args[3];
 		if(type == "complete")
 		{
+			strResult = result;
 			Debug.Log("Convert To Text complete, voiceid=" + voiceID + ", success=" + success + ", result=" + result);
 		}else if(type == "failed")
 		{
+			strResult = result;
 			Debug.Log("Convert To Text failed!, voiceid=" + voiceID + ", success=" + success + ", result=" + result);
 		}
 	}

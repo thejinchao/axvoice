@@ -24,6 +24,12 @@ typedef enum  {
     HAS_SERVER_FILE
 } ServerStatus;
 
+typedef enum {
+    NO_TEXT=0,
+    CONVERTING,
+    HAS_TEXT
+} ToTextStatus;
+
 @interface VoiceItem : NSObject
 
 
@@ -32,16 +38,20 @@ typedef enum  {
 @property (nonatomic, copy, readonly) NSString* localAmrFile;
 @property (nonatomic, copy, readonly) NSString* serverURL;
 @property (nonatomic, copy, readonly) NSString* fileMD5;
+@property (nonatomic, copy, readonly) NSString* text;
 @property (nonatomic, assign, readonly) LocalStatus localStatus;
 @property (nonatomic, assign, readonly) ServerStatus serverStatus;
+@property (nonatomic, assign, readonly) ToTextStatus toTextStatus;
 
 - (id)initWithParam : (uint)voiceID
        localWavFile : (NSString*) localWavFile
         localAmrFile: (NSString*)localAmrFile
           serverURL : (NSString*) serverURL
             fileMD5 : (NSString*) fileMD5
+               text : (NSString*) text
         localStatus : (LocalStatus) localStatus
-       serverStatus : (ServerStatus) serverStatus;
+       serverStatus : (ServerStatus) serverStatus
+       toTextStatus : (ToTextStatus) toTextStatus;
 
 - (void)startRecord;
 - (void)stopRecord;
@@ -49,6 +59,9 @@ typedef enum  {
 - (void)beginUpload;
 - (void)updateServerURL: (NSString*)serverURL;
 - (void)beginDownload;
+- (void)beginConvertToText;
+- (void)setText : (bool) success
+           text : (NSString *)text;
 
 @end
 

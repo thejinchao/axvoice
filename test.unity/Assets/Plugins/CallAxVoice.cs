@@ -11,7 +11,7 @@ namespace com.axia
 			
 	#if UNITY_IPHONE
         [DllImport ("__Internal")]
-        private static extern void _initAxVoice(string cachePath, string uploadURL);
+        private static extern void _initAxVoice(string cachePath, string uploadURL, string iflyID);
 
         [DllImport ("__Internal")]
         private static extern uint _beginRecord();
@@ -37,9 +37,12 @@ namespace com.axia
         [DllImport ("__Internal")]
         private static extern void _dispatchMessage(string callbackObjName);
 
-        public static void Init(string cachePath, string uploadURL)
+        [DllImport ("__Internal")]
+        private static extern void _voice2Text(uint voiceID);
+
+        public static void Init(string cachePath, string uploadURL, string iflyID)
         {
-        	_initAxVoice(cachePath, uploadURL);
+        	_initAxVoice(cachePath, uploadURL, iflyID);
         }
         
 			  public static uint BeginRecord() {
@@ -49,9 +52,6 @@ namespace com.axia
 
 			  public static void CompleteRecord(uint voiceID) {
 			    _completeRecord(voiceID);
-			    
-			    //hack
-			    UploadVoice(voiceID);
 			  }
 
 			  public static void UploadVoice(uint voiceID) {
@@ -78,7 +78,10 @@ namespace com.axia
 			  public static void DispatchMessage(string callbackObjName) {
 			  	_dispatchMessage(callbackObjName);
 			  }
-	
+				  
+				public static void Voice2Text(uint voiceID) {
+			    _voice2Text(voiceID); 
+			  }
 	#elif UNITY_ANDROID
         static private AndroidJavaClass clsAxVoice = new AndroidJavaClass("com.axia.AxVoice");
         
@@ -203,7 +206,7 @@ namespace com.axia
 
 	#else
 	//NOT SUPPORT YET!
-			  public static void Init(string cachePath, string uploadURL) {
+			  public static void Init(string cachePath, string uploadURL, string iflyID) {
 			  	
 			  }
 			
@@ -233,6 +236,8 @@ namespace com.axia
 			  public static void DispatchMessage(string callbackObj) {
 			  }
 			  
+				public static void Voice2Text(uint voiceID) {
+			  }			  
 	#endif
 	}
 }
