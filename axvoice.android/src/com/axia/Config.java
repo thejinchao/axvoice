@@ -1,6 +1,6 @@
 package com.axia;
 
-import android.content.Context;
+import android.app.Activity;
 
 
 public class Config {
@@ -9,6 +9,6 @@ public class Config {
 	//local cache file path 
 	public static String cacheAudioPath = UtilFunctions.getSDPath() + "cacheAudio/";
 	//application context
-	public static Context appContext = null;
+	public static Activity currentActivity = null;
 }
 

@@ -170,7 +170,7 @@ public class MainActivity extends Activity implements OnTouchListener, OnClickLi
 		mTimer.schedule(mTimerTask, 100, 100);
 		
 		//init axvoice
-		AxVoice._setNativeApplicationContext(this.getApplicationContext());
+		AxVoice._setNativeActivity(this);
 		AxVoice.init(Environment.getExternalStorageDirectory() + "/changyou/",
 				"http://dashengine.com/upload_voice", 
 				"54c0b179");

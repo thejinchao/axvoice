@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
 
-import android.content.Context;
+import android.app.Activity;
 import android.util.Log;
 
 import com.unity3d.player.UnityPlayer;
@@ -22,7 +22,7 @@ public class AxVoice {
 		
 		if(!iflyID.isEmpty()) {
 			Voice2TextWrap.getInstance().initEngine(
-					(Config.appContext!=null) ? Config.appContext : UnityPlayer.currentActivity, 
+					(Config.currentActivity!=null) ? Config.currentActivity : UnityPlayer.currentActivity, 
 					iflyID);
 		}
 		
@@ -31,9 +31,9 @@ public class AxVoice {
 	}
 	
 	//-------------------------------------------------------------------
-	static public void _setNativeApplicationContext(Context applicationContext)
+	static public void _setNativeActivity(Activity currentActivity)
 	{
-		Config.appContext = applicationContext;
+		Config.currentActivity = currentActivity;
 	}
 	
 	//-------------------------------------------------------------------

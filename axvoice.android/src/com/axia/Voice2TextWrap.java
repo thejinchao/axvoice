@@ -1,9 +1,9 @@
 package com.axia;
 
-import java.io.FileInputStream;
-
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 
 import com.iflytek.cloud.ErrorCode;
@@ -23,7 +23,7 @@ public class Voice2TextWrap {
 	}	
 	
 	private Callback callback;
-	private SpeechRecognizer mIat;
+	private SpeechRecognizer mIat=null;
 	private final String TAG = "Voice2TextWrap";
 	private String mResultText="";
 	private long voiceID;
@@ -39,17 +39,50 @@ public class Voice2TextWrap {
 		}
 	};
 	
-	void initEngine(Context context, String iflyID) {
-		//init ifly engine
-		try {
-		SpeechUtility.createUtility(context, SpeechConstant.APPID + "=" + iflyID + ", " +
-				SpeechConstant.FORCE_LOGIN + "=true");
-		}catch(Exception ex) {
-			String msg = ex.getMessage();
-			Log.e(TAG, "createUtility init failed, ex=" + msg);
+	void initEngine(final Activity currentActivity, final String iflyID) {
+		
+		class SpeechUtiltiyInitThread implements Runnable {
+			private Context context;
+			public Object ansyObject;
+			
+			@Override
+			public void run() {
+				try {
+					SpeechUtility.createUtility(context, SpeechConstant.APPID + "=" + iflyID);
+					synchronized(ansyObject) { ansyObject.notify(); }
+				}catch(Exception ex) {
+					String msg = ex.getMessage();
+					Log.e(TAG, "createUtility init failed, ex=" + msg);
+				}
+			}
+			
+			SpeechUtiltiyInitThread(Context context) {
+				this.context = context;
+				this.ansyObject = new Object();
+			}
 		}
+		
+		boolean mainThread = (Thread.currentThread() == Looper.getMainLooper().getThread());
+		if(mainThread) {
+			//init ifly engine(in main thread)
+			try {
+				SpeechUtility.createUtility(currentActivity, SpeechConstant.APPID + "=" + iflyID);
+			}catch(Exception ex) {
+				Log.e(TAG, "createUtility init failed, ex=" + ex.getMessage());
+			}
+		} else {
+			//init ifly engine(in other thread)
+			SpeechUtiltiyInitThread initThread = new SpeechUtiltiyInitThread(currentActivity);
+			currentActivity.runOnUiThread(initThread);
+			try {
+				synchronized(initThread.ansyObject) { initThread.ansyObject.wait(); }
+			}catch(Exception ex) {
+				
+			}
+		}
+		
 		//create speech recognizer object
-		mIat = SpeechRecognizer.createRecognizer(context, mInitListener);
+		mIat = SpeechRecognizer.createRecognizer(currentActivity, mInitListener);
 	}
 	
 	private void setIatParam(){
