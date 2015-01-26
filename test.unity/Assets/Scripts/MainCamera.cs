@@ -24,6 +24,7 @@ public class MainCamera : MonoBehaviour {
 		string iflyID = "54be5c4f";
 		m_dataPath=Path.GetTempPath();
 	#elif UNITY_ANDROID
+		string iflyID = "54c0b179";
 		m_dataPath=Application.persistentDataPath;
 	#else
 		string iflyID = "54bef90a";

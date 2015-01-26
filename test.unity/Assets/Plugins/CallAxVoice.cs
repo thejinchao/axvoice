@@ -85,9 +85,9 @@ namespace com.axia
 	#elif UNITY_ANDROID
         static private AndroidJavaClass clsAxVoice = new AndroidJavaClass("com.axia.AxVoice");
         
-        public static void Init(string cachePath, string uploadURL)
+        public static void Init(string cachePath, string uploadURL, string iflyID)
         {
-        	clsAxVoice.CallStatic("init", cachePath, uploadURL); 
+        	clsAxVoice.CallStatic("init", cachePath, uploadURL, iflyID); 
         }
         
 			  public static uint BeginRecord() {
@@ -122,6 +122,10 @@ namespace com.axia
 			
 			  public static void DispatchMessage(string callbackObj) {
 			  	clsAxVoice.CallStatic("dispatchMessage_Unity", callbackObj); 
+			  }
+			  
+				public static void Voice2Text(uint voiceID) {
+			    clsAxVoice.CallStatic("voice2Text", (long)voiceID); 
 			  }
 
 	#elif UNITY_STANDALONE_WIN		
