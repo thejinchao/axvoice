@@ -21,3 +21,4 @@ rd /s /q .\_gen
 
 echo "Copy to test project"
 copy axvoice.jar ..\test.unity\Assets\Plugins\Android
+copy axvoice.jar ..\test.android\libs
