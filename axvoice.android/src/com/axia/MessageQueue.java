@@ -74,6 +74,9 @@ public class MessageQueue {
 				case VoiceMessage.MT_PLAY_MSG:
 					UnityPlayer.UnitySendMessage(cbObjectName, "_OnAxVoicePlayMessage", _union_params(msg));
 					break;
+				case VoiceMessage.MT_TOTEXT_MSG:
+					UnityPlayer.UnitySendMessage(cbObjectName, "_OnAxVoiceTextMessage", _union_params(msg));
+					break;
 				}
 			}
 			msgQueue.clear();

@@ -4,20 +4,36 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
 
+import android.content.Context;
+import android.util.Log;
+
+import com.unity3d.player.UnityPlayer;
+
 public class AxVoice {
 	
 	//////////////////////////////////////////////////////
 	//public functions
 	//////////////////////////////////////////////////////
 	//-------------------------------------------------------------------
-	static public void init(String dataPath, String uploadURL)
+	static public void init(String dataPath, String uploadURL, String iflyID)
 	{
-		//AxTrace.SetTraceServer("192.168.0.100", 1978);
-
 		Config.cacheAudioPath = dataPath+"/";
 		Config.uploadUrl = uploadURL;
 		
-		//AxTrace.Trace("Init cache=%s, upload=%s", dataPath, uploadURL);
+		if(!iflyID.isEmpty()) {
+			Voice2TextWrap.getInstance().initEngine(
+					(Config.appContext!=null) ? Config.appContext : UnityPlayer.currentActivity, 
+					iflyID);
+		}
+		
+		Log.d("axvoice", "******\ncachePath=" + Config.cacheAudioPath + "\nuploadUrl=" + Config.uploadUrl + 
+				(iflyID.isEmpty() ? "" : "\niflyID="+iflyID));
+	}
+	
+	//-------------------------------------------------------------------
+	static public void _setNativeApplicationContext(Context applicationContext)
+	{
+		Config.appContext = applicationContext;
 	}
 	
 	//-------------------------------------------------------------------
@@ -295,7 +311,60 @@ public class AxVoice {
 		synchronized(VoiceManager.getInstance().thelock)  {
 			AudioPlayer.getInstance().stop();
 		}
-	}	
+	}
+	
+	//-------------------------------------------------------------------
+	static private class TextCallback implements Voice2TextWrap.Callback {
+		@Override
+		public void onConvertComplete(long voiceID, String result) {
+			synchronized(VoiceManager.getInstance().thelock) {
+				VoiceItem item = VoiceManager.getInstance().findItem(voiceID);
+				item.setText(true, result);
+				
+				MessageQueue.getInstance().pushMessage(
+						VoiceMessage.MT_TOTEXT_MSG, voiceID, "complete", true, result);
+			}
+		}
+
+		@Override
+		public void onConvertFailed(long voiceID, String reason) {
+			synchronized(VoiceManager.getInstance().thelock) {
+				VoiceItem item = VoiceManager.getInstance().findItem(voiceID);
+				item.setText(false, null);
+
+				MessageQueue.getInstance().pushMessage(
+						VoiceMessage.MT_TOTEXT_MSG, voiceID, "failed", false, reason);
+			}
+		}
+	}
+	
+	//-------------------------------------------------------------------
+	static public void voice2Text(long voiceID)
+	{
+		synchronized(VoiceManager.getInstance().thelock)  {
+			try {
+				//find the voice item
+				VoiceItem item = VoiceManager.getInstance().findItem(voiceID);
+				
+				if(item.getLocalStatus() != VoiceItem.LocalStatus.HAS_LOCAL_FILE)
+				{
+					//TODO: ERROR
+					return;
+				}
+				//to text
+				Voice2TextWrap.getInstance().beginConvert(voiceID, new TextCallback());
+				
+				//TODO: push message
+			}catch(NoSuchElementException e){
+				//TODO: ERROR
+				return;
+			}catch(Exception e) {
+				//TODO: ERROR
+				return;
+			}
+			
+		}		
+	}
 	//-------------------------------------------------------------------
 	public interface MessageCallBack
 	{

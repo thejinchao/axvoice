@@ -67,7 +67,7 @@
         android:layout_below="@id/editText_voice_id"
         android:layout_toRightOf="@id/button_download"
         android:layout_marginTop="5dp"
-        android:text="PlayVoice" />   
+        android:text="Play" />   
     
     <Button
         android:id="@+id/button_stop_voice"
@@ -75,9 +75,25 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/editText_voice_id"
         android:layout_toRightOf="@id/button_play_voice"
+        android:layout_marginTop="5dp"
+        android:text="Stop" />   
+    
+    <Button
+        android:id="@+id/button_to_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editText_voice_id"
+        android:layout_toRightOf="@id/button_stop_voice"
         android:layout_alignParentRight="true"
         android:layout_marginTop="5dp"
-        android:text="StopVoice" />   
+        android:text="Text" />  
+    <TextView
+        android:id="@+id/result_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_to_text"
+        android:layout_marginTop="5dp"
+		android:text="" />        
     
     <Button
         android:id="@+id/button_record"

@@ -5,6 +5,7 @@ public class VoiceMessage {
 	public static final int MT_UPLOAD_MSG = 2;
 	public static final int MT_DOWNLOAD_MSG = 3;
 	public static final int MT_PLAY_MSG = 4;
+	public static final int MT_TOTEXT_MSG = 5;
 	
 	public long voiceID;
 	public int msgType;

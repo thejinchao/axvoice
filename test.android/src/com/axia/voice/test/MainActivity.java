@@ -2,7 +2,6 @@ package com.axia.voice.test;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -13,6 +12,7 @@ import org.apache.http.util.EncodingUtils;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -31,7 +31,7 @@ public class MainActivity extends Activity implements OnTouchListener, OnClickLi
 	private static final int DISPATCH_VOICE_MESSAGE = 0;
 	private static final int DISPATCH_SERVER_URL_DOWNLOAD = 1;
 	private static final int DISPATCH_VOICE_ID_DOWNLOAD = 2;
-	private TextView voiceIDView, voiceURLView;
+	private TextView voiceIDView, voiceURLView, resultView;
 	private long currentVoiceID;
 	private Timer mTimer;
 	private TimerTask mTimerTask;
@@ -102,6 +102,23 @@ public class MainActivity extends Activity implements OnTouchListener, OnClickLi
 					}
 				}
 				break;
+				
+			case VoiceMessage.MT_TOTEXT_MSG:
+				{
+					long voiceID = msg.voiceID;
+					String type = msg.params[0];
+					String success = msg.params[1];
+					String result = msg.params[2];
+					Log.i("axvoice", "text complete, id=" + voiceID + ", suc=" + success + ",result=" + result);
+
+					if(type=="complete" && success=="true")
+					{
+						resultView.setText(result); 
+					} else if(type=="failed") {
+						resultView.setText(result); 
+					}
+				}
+				break;
 			}
 		}
 	}
@@ -121,9 +138,11 @@ public class MainActivity extends Activity implements OnTouchListener, OnClickLi
 		((Button)findViewById(R.id.button_play_voice)).setOnClickListener(this);
 		((Button)findViewById(R.id.button_stop_voice)).setOnClickListener(this);
 		((Button)findViewById(R.id.button_record)).setOnTouchListener(this);
+		((Button)findViewById(R.id.button_to_text)).setOnClickListener(this);
 		
 		voiceIDView = (TextView)findViewById(R.id.editText_voice_id);
 		voiceURLView = (TextView)findViewById(R.id.editText_voice_url);
+		resultView = (TextView)findViewById(R.id.result_text);
 		
 		mTimer = new Timer();
 		mTimerTask = new TimerTask() {
@@ -149,6 +168,12 @@ public class MainActivity extends Activity implements OnTouchListener, OnClickLi
 			}
 		};
 		mTimer.schedule(mTimerTask, 100, 100);
+		
+		//init axvoice
+		AxVoice._setNativeApplicationContext(this.getApplicationContext());
+		AxVoice.init(Environment.getExternalStorageDirectory() + "/changyou/",
+				"http://dashengine.com/upload_voice", 
+				"54c0b179");
     }
     
 	@Override
@@ -245,6 +270,14 @@ public class MainActivity extends Activity implements OnTouchListener, OnClickLi
 				AxVoice.stopVoice();
 			}
 			break;
+			
+		case R.id.button_to_text:
+			{
+				resultView.setText("");
+				AxVoice.voice2Text(Long.parseLong(voiceIDView.getText().toString()));
+			}
+			break;
+		
 		}
 	}
 	

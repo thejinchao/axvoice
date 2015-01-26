@@ -17,9 +17,10 @@ public class VoiceManager {
 		long uniqueID = System.currentTimeMillis() & 0xFFFFFF;
 		String localFilePath = Config.cacheAudioPath + uniqueID + VOICE_FILE_EXT;
 		
-		VoiceItem newItem = new VoiceItem(uniqueID, localFilePath, "", "", 
+		VoiceItem newItem = new VoiceItem(uniqueID, localFilePath, "", "", "",
 				VoiceItem.LocalStatus.NO_LOCAL_FILE, 
-				VoiceItem.ServerStatus.NO_SERVER_FILE);
+				VoiceItem.ServerStatus.NO_SERVER_FILE, 
+				VoiceItem.TextStatus.NO_TEXT);
 		
 		synchronized(voiceHashMap){
 			voiceHashMap.put(newItem.getVoiceID(), newItem);
