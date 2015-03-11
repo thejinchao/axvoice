@@ -49,9 +49,6 @@ namespace com.axia
 
 			  public static void CompleteRecord(uint voiceID) {
 			    _completeRecord(voiceID);
-			    
-			    //hack
-			    UploadVoice(voiceID);
 			  }
 
 			  public static void UploadVoice(uint voiceID) {
